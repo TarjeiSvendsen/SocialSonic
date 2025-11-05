@@ -21,7 +21,6 @@ public class ArrayUtilTests {
         void inputOutputMismatch(){
             byte[] combined = ArrayUtils.mergeByteArrays(test1,test2);
             assertEquals(Arrays.toString(actual), Arrays.toString(combined),"Input does not match output");
-            assertNotEquals(Arrays.toString(actual) + " ",Arrays.toString(combined),"Input does not match output");
         }
         @Test
         void emptyArray(){
