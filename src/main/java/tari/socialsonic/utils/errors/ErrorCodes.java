@@ -34,34 +34,27 @@ public enum ErrorCodes {
             }
             case SERVER_SUB_VERSION -> {
                 return new SubsonicResponse(constructErrorAttributes(SERVER_SUB_VERSION.code, SERVER_SUB_VERSION.description, "https://example.com"));
-
             }
             case AUTH_FAILED_CLASSIC -> {
                 return new SubsonicResponse(constructErrorAttributes(AUTH_FAILED_CLASSIC.code, AUTH_FAILED_CLASSIC.description, "https://example.com"));
-
             }
             case LDAP_TOKEN_NOT_SUPPORTED -> {
                 return new SubsonicResponse(constructErrorAttributes(LDAP_TOKEN_NOT_SUPPORTED.code, LDAP_TOKEN_NOT_SUPPORTED.description, "https://example.com"));
-
             }
             case NON_SUPPORTED_AUTH -> {
                 return new SubsonicResponse(constructErrorAttributes(NON_SUPPORTED_AUTH.code, NON_SUPPORTED_AUTH.description, "https://example.com"));
-
             }
             case CONFLICTION_AUTHS -> {
                 return new SubsonicResponse(constructErrorAttributes(CONFLICTION_AUTHS.code, CONFLICTION_AUTHS.description, "https://example.com"));
-
             }
             case INVALID_API_KEY -> {
                 return new SubsonicResponse(constructErrorAttributes(INVALID_API_KEY.code, INVALID_API_KEY.description, "https://example.com"));
-
             }
             case NOT_AUTHORIZED -> {
                 return new SubsonicResponse(constructErrorAttributes(NOT_AUTHORIZED.code, NOT_AUTHORIZED.description, "https://example.com"));
             }
             case SUBSONIC_PREM -> {
                 return new SubsonicResponse(constructErrorAttributes(SUBSONIC_PREM.code, SUBSONIC_PREM.description, "https://example.com"));
-
             }
             case NOT_FOUND -> {
                 return new SubsonicResponse(constructErrorAttributes(NOT_FOUND.code, NOT_FOUND.description, "https://example.com"));
