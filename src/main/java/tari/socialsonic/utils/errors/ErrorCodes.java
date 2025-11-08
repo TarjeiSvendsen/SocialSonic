@@ -58,7 +58,6 @@ public enum ErrorCodes {
             }
             case NOT_FOUND -> {
                 return new SubsonicResponse(constructErrorAttributes(NOT_FOUND.code, NOT_FOUND.description, "https://example.com"));
-
             }
             default -> {
                 return new SubsonicResponse(constructErrorAttributes(GENERIC.code, GENERIC.description, "https://example.com"));
