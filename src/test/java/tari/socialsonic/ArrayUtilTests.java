@@ -31,5 +31,16 @@ public class ArrayUtilTests {
 
         }
     }
+    @Nested
+    class QuickSortTests{
 
+        int[] expectedResult = {1,2,3,4,5,6,7};
+        @Test
+        void sortedProperly(){
+            int[] a = {5,2,3,7,1,4,6};
+            ArrayUtils.quickSort(a);
+            assertEquals(Arrays.toString(expectedResult), Arrays.toString(a),"Array is not sorted properly");
+        }
+
+    }
 }
