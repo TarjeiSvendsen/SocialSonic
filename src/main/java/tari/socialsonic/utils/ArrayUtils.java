@@ -26,12 +26,12 @@ public class ArrayUtils {
     }
     private static void quickSort(int[] unsortedArray, int from, int to){
         if (to - from <= 0) return;
-        int k = partitionByRange(unsortedArray,from,to);
+        int k = partitionByValue(unsortedArray,from,to);
 
         quickSort(unsortedArray,from,k-1);
         quickSort(unsortedArray,k+1,to);
     }
-    private static int partitionByRange(int[] unsortedArray,int from, int to){
+    private static int partitionByValue(int[] unsortedArray, int from, int to){
         int left = from;
         int right = to -1;
         int pivot = unsortedArray[to];
