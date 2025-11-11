@@ -28,7 +28,7 @@ public class SubsonicResponse {
 
     /**
      * This constructs an empty root or regular subsonic-response node.
-     * @param isRoot determines if node is a root node or not, bad practice!!
+     * @param isRoot determines if node is a root node or not, bad practice.
      */
     public SubsonicResponse(boolean isRoot){
         // TODO, this should not be manually determined, should be a check in the serializer instead, to make sure we don't nest root elements by accident.
@@ -38,22 +38,6 @@ public class SubsonicResponse {
         if (this.isRoot)addRootAttributes();
     }
 
-    public SubsonicResponse(boolean isRoot, MultiValueMap<String, SubsonicResponse> childNodes){
-        this.isRoot = isRoot;
-        this.attributes = new HashMap<>();
-        if (this.isRoot)addRootAttributes();
-        this.childNodes = childNodes;
-    }
-
-
-    public SubsonicResponse(MultiValueMap<String, SubsonicResponse> childNodes, SubsonicResponse.Attribute... attributes){
-        this.isRoot = false;
-        this.attributes = new HashMap<>();
-        this.childNodes = childNodes;
-        for (Attribute a: attributes){
-            this.attributes.put(a.key,a.value);
-        }
-    }
     public SubsonicResponse(SubsonicResponse.Attribute... attributes){
         this.isRoot = false;
         this.attributes = new HashMap<>();
@@ -62,6 +46,14 @@ public class SubsonicResponse {
             this.attributes.put(a.key,a.value);
         }
     }
+
+    public void addAttribute(Attribute attribute){
+        attributes.put(attribute.key,attribute.value);
+    }
+    public void addChildNode(String elementName, SubsonicResponse childNode){
+        childNodes.add(elementName, childNode);
+    }
+
     private void addRootAttributes(){
         attributes.put("status","ok");
         attributes.put("version","1.15.1");
