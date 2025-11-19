@@ -48,13 +48,7 @@ public class ResponseSerializer extends StdSerializer<SubsonicResponse> {
         if (generator instanceof ToXmlGenerator xmlGenerator) {
             for (Map.Entry<String, Object> attribute : subsonicResponse.attributes.entrySet()) {
                 xmlGenerator.setNextIsAttribute(true);
-                if (attribute.getValue() instanceof Boolean) {
-                    xmlGenerator.writeBooleanField(attribute.getKey(), (Boolean) attribute.getValue());
-                }
-                else if(attribute.getValue() instanceof Number){
-                    xmlGenerator.writeNumberField(attribute.getKey(), (Integer) attribute.getValue());
-                }
-                else xmlGenerator.writeStringField(attribute.getKey(), (String) attribute.getValue());
+                xmlGenerator.writeObjectField(attribute.getKey(),attribute.getValue());
             }
         }
         else {
