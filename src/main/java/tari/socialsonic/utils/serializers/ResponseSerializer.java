@@ -48,7 +48,13 @@ public class ResponseSerializer extends StdSerializer<SubsonicResponse> {
         if (generator instanceof ToXmlGenerator xmlGenerator) {
             for (Map.Entry<String, Object> attribute : subsonicResponse.attributes.entrySet()) {
                 xmlGenerator.setNextIsAttribute(true);
-                generator.writeObjectField(attribute.getKey(), attribute.getValue());
+                if (attribute.getValue() instanceof Boolean) {
+                    xmlGenerator.writeBooleanField(attribute.getKey(), (Boolean) attribute.getValue());
+                }
+                else if(attribute.getValue() instanceof Number){
+                    xmlGenerator.writeNumberField(attribute.getKey(), (Integer) attribute.getValue());
+                }
+                else xmlGenerator.writeStringField(attribute.getKey(), (String) attribute.getValue());
             }
         }
         else {
@@ -58,7 +64,11 @@ public class ResponseSerializer extends StdSerializer<SubsonicResponse> {
 
                 if (attribute.getValue() instanceof Boolean) {
                     generator.writeBooleanField(attribute.getKey(), (Boolean) attribute.getValue());
-                } else generator.writeStringField(attribute.getKey(), (String) attribute.getValue());
+                }
+                else if(attribute.getValue() instanceof Number){
+                    generator.writeNumberField(attribute.getKey(), (Integer) attribute.getValue());
+                }
+                else generator.writeStringField(attribute.getKey(), (String) attribute.getValue());
 
             }
         }
@@ -80,7 +90,7 @@ public class ResponseSerializer extends StdSerializer<SubsonicResponse> {
         }
         catch (IOException ioException){
             // TODO Proper error handling
-            System.out.println("Encountered error");
+            System.out.println("Encountered error: " + ioException);
         }
 
     }
