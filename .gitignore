@@ -18,6 +18,7 @@ target/
 
 ### API Testing ###
 .bruno
+/src/main/resources/testing/
 
 ### IntelliJ IDEA ###
 .idea
