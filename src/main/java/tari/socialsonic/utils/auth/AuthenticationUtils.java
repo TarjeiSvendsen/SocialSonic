@@ -10,7 +10,6 @@ import tari.socialsonic.utils.ArrayUtils;
 
 import java.util.Map;
 import java.util.Random;
-
 @Component
 public class AuthenticationUtils {
 
