@@ -57,7 +57,8 @@ public class AuthenticationUtils {
 
     public boolean validateApiKey(String apiKey){
         ApiKey tmpKey = apiKeyService.getApiKeyByKey(apiKey);
-        return tmpKey.valid();
+        if (tmpKey == null) return false;
+        else return tmpKey.valid();
     }
 
 }
