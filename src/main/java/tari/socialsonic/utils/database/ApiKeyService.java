@@ -1,7 +1,9 @@
-package tari.socialsonic.entities;
+package tari.socialsonic.utils.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tari.socialsonic.entities.ApiKey;
+import tari.socialsonic.entities.User;
 
 import java.time.LocalDate;
 import java.util.List;
