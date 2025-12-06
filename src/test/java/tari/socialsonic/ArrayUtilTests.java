@@ -2,11 +2,13 @@ package tari.socialsonic;
 
 
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import tari.socialsonic.utils.ArrayUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("UnitTests")
 public class ArrayUtilTests {
 
     @Nested
