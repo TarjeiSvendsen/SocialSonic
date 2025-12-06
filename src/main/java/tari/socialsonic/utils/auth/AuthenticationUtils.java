@@ -1,6 +1,5 @@
 package tari.socialsonic.utils.auth;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 import tari.socialsonic.entities.ApiKey;
@@ -13,8 +12,11 @@ import java.util.Random;
 @Component
 public class AuthenticationUtils {
 
-    @Autowired
-    private ApiKeyService apiKeyService;
+    private final ApiKeyService apiKeyService;
+
+    public AuthenticationUtils(final ApiKeyService apiKeyService){
+        this.apiKeyService = apiKeyService;
+    }
     /**
      *
      * @param params the parameters from the endpoint
@@ -23,18 +25,15 @@ public class AuthenticationUtils {
     public boolean authenticate(Map<String,String> params){
         // TODO, find more elegant (and possibly more performant?) solution
         if (params.containsKey("apiKey")){
+            if (params.containsKey("u")) return false;
             return validateApiKey(params.get("apiKey"));
         }
         else if(params.containsKey("u")){
             if (params.containsKey("p")){
-
-                return !params.containsKey("apiKey"); // TODO, should return an error message in this case, should be moved somewhere else?
+                return false; // Plaintext password isn't secure, therefore not supported.
             }
             else if (params.containsKey("t") && params.containsKey("s")){
-
-                byte[] salt = DigestUtils.md5Digest(params.get("s").getBytes());
-                byte[] token = DigestUtils.md5Digest(params.get("t").getBytes());
-                byte[] combination = ArrayUtils.mergeByteArrays(salt,token);
+                byte[] combination = getTokenSaltCombination(params);
                 return checkSaltedPassword(combination);
             }
         }
@@ -45,14 +44,14 @@ public class AuthenticationUtils {
         return true;
     }
 
-    public static String generateApiKey(){
+    public static String generateKey(){
         Random random = new Random();
         return Long.toHexString(random.nextLong());
     }
-    public String generateApiKey(User user){
+    public ApiKey generateApiKey(User user){
         ApiKey apikey = new ApiKey(user);
-        apiKeyService.saveKey(apikey);
-        return apikey.getKey();
+        if(!apiKeyService.saveKey(apikey)) throw new RuntimeException("Failed to save API-key, is the DB configured correctly?");
+        return apikey;
     }
 
     public boolean validateApiKey(String apiKey){
@@ -61,4 +60,9 @@ public class AuthenticationUtils {
         else return tmpKey.valid();
     }
 
+    public byte[] getTokenSaltCombination(Map<String,String> params){
+        byte[] salt = DigestUtils.md5Digest(params.get("s").getBytes());
+        byte[] token = DigestUtils.md5Digest(params.get("t").getBytes());
+        return ArrayUtils.mergeByteArrays(salt,token);
+    }
 }
