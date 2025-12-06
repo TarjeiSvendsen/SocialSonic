@@ -15,7 +15,7 @@ public class ApiKey {
     private final LocalDate dateValidTo;
 
     public ApiKey(){
-        key = AuthenticationUtils.generateApiKey();
+        key = AuthenticationUtils.generateKey();
         dateIssued = LocalDate.now();
         dateValidTo = LocalDate.ofYearDay(LocalDate.now().getYear() +1, LocalDate.now().getDayOfYear());
     }
