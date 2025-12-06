@@ -29,6 +29,12 @@
     <properties>
         <java.version>25</java.version>
     </properties>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -97,6 +103,12 @@
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.manevolent</groupId>
+            <artifactId>ffmpeg4j</artifactId>
+            <version> 5.1.2-1.5.8-4</version>
+        </dependency>
+
     </dependencies>
 
     <build>
