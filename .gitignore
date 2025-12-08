@@ -17,7 +17,6 @@ target/
 .env
 
 ### API Testing ###
-.bruno
 /src/main/resources/testing/
 
 ### IntelliJ IDEA ###

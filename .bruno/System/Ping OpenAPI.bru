@@ -1,0 +1,21 @@
+meta {
+  name: Ping OpenAPI
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/api/v1/ping?apiKey=123&f=json
+  body: none
+  auth: inherit
+}
+
+params:query {
+  apiKey: 123
+  f: json
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
