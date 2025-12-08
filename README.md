@@ -1,1 +1,8 @@
 # SocialSonic
+
+
+## Build
+
+### Container
+
+## Tests
