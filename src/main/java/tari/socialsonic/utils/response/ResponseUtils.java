@@ -7,11 +7,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import tari.socialsonic.SubsonicResponse;
 import tari.socialsonic.utils.errors.ErrorCodes;
 
 import java.util.Map;
 
+@Component
 public class ResponseUtils {
 
     ObjectMapper mapper = new ObjectMapper();

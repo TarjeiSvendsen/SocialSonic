@@ -1,6 +1,7 @@
 package tari.socialsonic.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import tari.socialsonic.utils.auth.AuthenticationUtils;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ public class ApiKey {
     @Id
     private final String key;
     @ManyToOne
+    @NotNull
     private User issuedBy;
     private final LocalDate dateIssued;
     private final LocalDate dateValidTo;

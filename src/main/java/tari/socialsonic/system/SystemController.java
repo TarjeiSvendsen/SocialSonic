@@ -1,6 +1,5 @@
 package tari.socialsonic.system;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +13,13 @@ import java.util.Map;
 
 @RestController
 public class SystemController {
-    ResponseUtils responseUtils = new ResponseUtils();
-    @Autowired
-    AuthenticationUtils authUtils;
+    private final ResponseUtils responseUtils;
+    private final AuthenticationUtils authUtils;
+
+    public SystemController(ResponseUtils responseUtils, AuthenticationUtils authUtils){
+        this.responseUtils = responseUtils;
+        this.authUtils = authUtils;
+    }
 
     @GetMapping(value = {"/rest/ping", "/api/v1/ping"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> ping(@RequestParam Map<String, String> params) {

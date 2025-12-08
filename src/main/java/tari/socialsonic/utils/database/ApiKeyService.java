@@ -1,6 +1,5 @@
 package tari.socialsonic.utils.database;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tari.socialsonic.entities.ApiKey;
 import tari.socialsonic.entities.User;
@@ -11,8 +10,11 @@ import java.util.List;
 @Service
 public class ApiKeyService{
 
-    @Autowired
-    private ApiKeyRepository apiKeyRepository;
+    private final ApiKeyRepository apiKeyRepository;
+
+    public ApiKeyService(final ApiKeyRepository apiKeyRepository){
+        this.apiKeyRepository = apiKeyRepository;
+    }
 
     public List<ApiKey> getAllByUser(User user){
         return apiKeyRepository.getAllByIssuedBy(user);
