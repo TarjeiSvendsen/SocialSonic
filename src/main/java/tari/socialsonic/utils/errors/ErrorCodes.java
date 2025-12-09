@@ -25,42 +25,56 @@ public enum ErrorCodes {
     }
 
     public static SubsonicResponse createErrorResponseFromCode(int code){
+        SubsonicResponse response = new SubsonicResponse();
+        response.overrideAttribute("status","failed");
         switch (code){
             case 10 -> {
-                return new SubsonicResponse(constructErrorAttributes(MISSING_PARAMETER.code, MISSING_PARAMETER.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(MISSING_PARAMETER.code, MISSING_PARAMETER.description, "https://example.com")));
+                return response;
             }
             case 20 -> {
-                return new SubsonicResponse(constructErrorAttributes(CLIENT_SUB_VERSION.code, CLIENT_SUB_VERSION.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(CLIENT_SUB_VERSION.code, CLIENT_SUB_VERSION.description, "https://example.com")));
+                return response;
             }
             case 30 -> {
-                return new SubsonicResponse(constructErrorAttributes(SERVER_SUB_VERSION.code, SERVER_SUB_VERSION.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(SERVER_SUB_VERSION.code, SERVER_SUB_VERSION.description, "https://example.com")));
+                return response;
             }
             case 40 -> {
-                return new SubsonicResponse(constructErrorAttributes(AUTH_FAILED_CLASSIC.code, AUTH_FAILED_CLASSIC.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(AUTH_FAILED_CLASSIC.code, AUTH_FAILED_CLASSIC.description, "https://example.com")));
+                return response;
             }
             case 41 -> {
-                return new SubsonicResponse(constructErrorAttributes(LDAP_TOKEN_NOT_SUPPORTED.code, LDAP_TOKEN_NOT_SUPPORTED.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(LDAP_TOKEN_NOT_SUPPORTED.code, LDAP_TOKEN_NOT_SUPPORTED.description, "https://example.com")));
+                return response;
             }
             case 42 -> {
-                return new SubsonicResponse(constructErrorAttributes(NON_SUPPORTED_AUTH.code, NON_SUPPORTED_AUTH.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(NON_SUPPORTED_AUTH.code, NON_SUPPORTED_AUTH.description, "https://example.com")));
+                return response;
             }
             case 43 -> {
-                return new SubsonicResponse(constructErrorAttributes(CONFLICTION_AUTHS.code, CONFLICTION_AUTHS.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(CONFLICTION_AUTHS.code, CONFLICTION_AUTHS.description, "https://example.com")));
+                return response;
             }
             case 44 -> {
-                return new SubsonicResponse(constructErrorAttributes(INVALID_API_KEY.code, INVALID_API_KEY.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(INVALID_API_KEY.code, INVALID_API_KEY.description, "https://example.com")));
+                return response;
             }
             case 50 -> {
-                return new SubsonicResponse(constructErrorAttributes(NOT_AUTHORIZED.code, NOT_AUTHORIZED.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(NOT_AUTHORIZED.code, NOT_AUTHORIZED.description, "https://example.com")));
+                return response;
             }
             case 60 -> {
-                return new SubsonicResponse(constructErrorAttributes(SUBSONIC_PREM.code, SUBSONIC_PREM.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(SUBSONIC_PREM.code, SUBSONIC_PREM.description, "https://example.com")));
+                return response;
             }
             case 70 -> {
-                return new SubsonicResponse(constructErrorAttributes(NOT_FOUND.code, NOT_FOUND.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(NOT_FOUND.code, NOT_FOUND.description, "https://example.com")));
+                return response;
             }
             default -> {
-                return new SubsonicResponse(constructErrorAttributes(GENERIC.code, GENERIC.description, "https://example.com"));
+                response.addChildNode("error",constructErrorNode(constructErrorAttributes(GENERIC.code, GENERIC.description, "https://example.com")));
+                return response;
             }
         }
     }
@@ -69,5 +83,8 @@ public enum ErrorCodes {
         return new SubsonicResponse.Attribute[]{new SubsonicResponse.Attribute("code",code),
                 new SubsonicResponse.Attribute("message",message),
                 new SubsonicResponse.Attribute("helpUrl",helpUrl)};
+    }
+    public static SubsonicResponse constructErrorNode(SubsonicResponse.Attribute[] attributes){
+        return new SubsonicResponse(attributes);
     }
 }
