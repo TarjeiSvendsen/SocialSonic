@@ -19,26 +19,25 @@ public class AuthenticationUtils {
         this.apiKeyService = apiKeyService;
     }
     /**
-     *
+     * Primary method for authenticating
      * @param params the parameters from the endpoint
-     * @return a boolean indicating if the user is authenticated or not
+     * @return an error code upon unsuccessfully authenticating, or -1 indicating success.
      */
-    public boolean authenticate(Map<String,String> params){
-        // TODO, find more elegant (and possibly more performant?) solution
+    public int authenticate(Map<String,String> params){
         if (params.containsKey("apiKey")){
-            if (params.containsKey("u")) return false;
-            return validateApiKey(params.get("apiKey"));
+            if (params.containsKey("u")) return 43;
+            return validateApiKey(params.get("apiKey")) ? -1 : 44;
         }
         else if(params.containsKey("u")){
             if (params.containsKey("p")){
-                return false; // Plaintext password isn't secure, therefore not supported.
+                return 42; // Plaintext password isn't secure, therefore it's not supported.
             }
             else if (params.containsKey("t") && params.containsKey("s")){
                 byte[] combination = getTokenSaltCombination(params);
-                return checkSaltedPassword(combination);
+                return checkSaltedPassword(combination) ? -1 : 40;
             }
         }
-        return false;
+        return 0;
     }
 
     public static boolean checkSaltedPassword(byte[] saltedPassword){

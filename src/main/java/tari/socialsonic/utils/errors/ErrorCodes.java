@@ -24,39 +24,39 @@ public enum ErrorCodes {
         this.description = description;
     }
 
-    public static SubsonicResponse createErrorResponse(ErrorCodes errorCode){
-        switch (errorCode){
-            case MISSING_PARAMETER -> {
+    public static SubsonicResponse createErrorResponseFromCode(int code){
+        switch (code){
+            case 10 -> {
                 return new SubsonicResponse(constructErrorAttributes(MISSING_PARAMETER.code, MISSING_PARAMETER.description, "https://example.com"));
             }
-            case CLIENT_SUB_VERSION -> {
+            case 20 -> {
                 return new SubsonicResponse(constructErrorAttributes(CLIENT_SUB_VERSION.code, CLIENT_SUB_VERSION.description, "https://example.com"));
             }
-            case SERVER_SUB_VERSION -> {
+            case 30 -> {
                 return new SubsonicResponse(constructErrorAttributes(SERVER_SUB_VERSION.code, SERVER_SUB_VERSION.description, "https://example.com"));
             }
-            case AUTH_FAILED_CLASSIC -> {
+            case 40 -> {
                 return new SubsonicResponse(constructErrorAttributes(AUTH_FAILED_CLASSIC.code, AUTH_FAILED_CLASSIC.description, "https://example.com"));
             }
-            case LDAP_TOKEN_NOT_SUPPORTED -> {
+            case 41 -> {
                 return new SubsonicResponse(constructErrorAttributes(LDAP_TOKEN_NOT_SUPPORTED.code, LDAP_TOKEN_NOT_SUPPORTED.description, "https://example.com"));
             }
-            case NON_SUPPORTED_AUTH -> {
+            case 42 -> {
                 return new SubsonicResponse(constructErrorAttributes(NON_SUPPORTED_AUTH.code, NON_SUPPORTED_AUTH.description, "https://example.com"));
             }
-            case CONFLICTION_AUTHS -> {
+            case 43 -> {
                 return new SubsonicResponse(constructErrorAttributes(CONFLICTION_AUTHS.code, CONFLICTION_AUTHS.description, "https://example.com"));
             }
-            case INVALID_API_KEY -> {
+            case 44 -> {
                 return new SubsonicResponse(constructErrorAttributes(INVALID_API_KEY.code, INVALID_API_KEY.description, "https://example.com"));
             }
-            case NOT_AUTHORIZED -> {
+            case 50 -> {
                 return new SubsonicResponse(constructErrorAttributes(NOT_AUTHORIZED.code, NOT_AUTHORIZED.description, "https://example.com"));
             }
-            case SUBSONIC_PREM -> {
+            case 60 -> {
                 return new SubsonicResponse(constructErrorAttributes(SUBSONIC_PREM.code, SUBSONIC_PREM.description, "https://example.com"));
             }
-            case NOT_FOUND -> {
+            case 70 -> {
                 return new SubsonicResponse(constructErrorAttributes(NOT_FOUND.code, NOT_FOUND.description, "https://example.com"));
             }
             default -> {
