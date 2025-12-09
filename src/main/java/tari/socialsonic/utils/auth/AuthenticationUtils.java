@@ -37,11 +37,13 @@ public class AuthenticationUtils {
                 return checkSaltedPassword(combination) ? -1 : 40;
             }
         }
+        else return 10;
         return 0;
     }
 
     public static boolean checkSaltedPassword(byte[] saltedPassword){
-        return true;
+
+        return false;
     }
 
     public static String generateKey(){
@@ -59,10 +61,9 @@ public class AuthenticationUtils {
         if (tmpKey == null) return false;
         else return tmpKey.valid();
     }
-
     public byte[] getTokenSaltCombination(Map<String,String> params){
-        byte[] salt = DigestUtils.md5Digest(params.get("s").getBytes());
-        byte[] token = DigestUtils.md5Digest(params.get("t").getBytes());
-        return ArrayUtils.mergeByteArrays(salt,token);
+        byte[] salt = params.get("s").getBytes();
+        byte[] token = params.get("t").getBytes();
+        return DigestUtils.md5Digest(ArrayUtils.mergeByteArrays(salt,token));
     }
 }
