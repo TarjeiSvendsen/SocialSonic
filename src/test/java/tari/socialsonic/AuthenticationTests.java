@@ -29,7 +29,7 @@ public class AuthenticationTests {
             Map<String,String> params = new HashMap<>();
             params.put("apiKey","123");
             params.put("u","helloThere");
-            assertFalse(utils.authenticate(params),"Method should return invalid given the circumstance of both an api key and user");
+            assertNotEquals(-1,utils.authenticate(params),"Method should return invalid given the circumstance of both an api key and user");
         }
     }
     @Nested
@@ -39,35 +39,35 @@ public class AuthenticationTests {
             Map<String,String> params = new HashMap<>();
             params.put("u","helloThere");
             params.put("p","nope");
-            assertFalse(utils.authenticate(params),"Legacy authentication with a plaintext password is not supported");
+            assertNotEquals(-1,utils.authenticate(params),"Legacy authentication with a plaintext password is not supported");
         }
 
         @Test
         public void missingUserParam(){
             Map<String,String> params = new HashMap<>();
             params.put("p","nope");
-            assertFalse(utils.authenticate(params),"Legacy authentication with a plaintext password is not supported");
+            assertNotEquals(-1,utils.authenticate(params),"Legacy authentication with a plaintext password is not supported");
         }
         @Test
         public void missingPasswordParam(){
             Map<String,String> params = new HashMap<>();
             params.put("u","helloThere");
 
-            assertFalse(utils.authenticate(params),"Legacy authentication with a plaintext password is not supported");
+            assertNotEquals(-1,utils.authenticate(params),"Legacy authentication with a plaintext password is not supported");
         }
         @Test
         public void missingTokenParam(){
             Map<String,String> params = new HashMap<>();
             params.put("u","helloThere");
             params.put("s","bingingSalt");
-            assertFalse(utils.authenticate(params),"Legacy authentication with a plaintext password is not supported");
+            assertNotEquals(-1,utils.authenticate(params),"Legacy authentication with a plaintext password is not supported");
         }
         @Test
         public void missingSaltParam(){
             Map<String,String> params = new HashMap<>();
             params.put("u","helloThere");
             params.put("t","h3h44h45");
-            assertFalse(utils.authenticate(params),"Legacy authentication with a plaintext password is not supported");
+            assertNotEquals(-1,utils.authenticate(params),"Legacy authentication with a plaintext password is not supported");
         }
 
 

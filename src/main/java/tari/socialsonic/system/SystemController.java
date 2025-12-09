@@ -23,9 +23,10 @@ public class SystemController {
 
     @GetMapping(value = {"/rest/ping", "/api/v1/ping"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> ping(@RequestParam Map<String, String> params) {
-        if (authUtils.authenticate(params))
+        int authResult = authUtils.authenticate(params);
+        if (authResult == -1)
             return responseUtils.generateResponse(params);
-        else return responseUtils.generateResponse(params, ErrorCodes.createErrorResponse(ErrorCodes.INVALID_API_KEY));
+        else return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(authResult));
     }
 
 }

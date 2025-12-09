@@ -37,7 +37,7 @@ public class ResponseUtils {
                 headers.setContentType(MediaType.APPLICATION_XML);
                 return new ResponseEntity<>(xmlMapper.writeValueAsString(plannedResponse), headers, HttpStatus.OK);
             } else
-                return ResponseEntity.badRequest().body(mapper.writeValueAsString(ErrorCodes.createErrorResponse(ErrorCodes.GENERIC)));
+                return ResponseEntity.badRequest().body(mapper.writeValueAsString(ErrorCodes.createErrorResponseFromCode(0)));
         }
         catch (Exception e){
             // TODO, proper error handling required.
