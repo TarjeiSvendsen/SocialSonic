@@ -25,7 +25,7 @@ public enum ErrorCodes {
     }
 
     public static SubsonicResponse createErrorResponseFromCode(int code){
-        SubsonicResponse response = new SubsonicResponse();
+        SubsonicResponse response = new SubsonicResponse(true);
         response.overrideAttribute("status","failed");
         switch (code){
             case 10 -> {

@@ -20,18 +20,10 @@ public class SubsonicResponse {
 
 
     /**
-     * This constructs an empty root subsonic-response node
-     */
-    public SubsonicResponse(){
-        this(true);
-    }
-
-    /**
      * This constructs an empty root or regular subsonic-response node.
-     * @param isRoot determines if node is a root node or not, bad practice.
+     * @param isRoot determines if node is a root node or not.
      */
     public SubsonicResponse(boolean isRoot){
-        // TODO, this should not be manually determined, should be a check in the serializer instead, to make sure we don't nest root elements by accident.
         this.isRoot = isRoot;
         this.attributes = new HashMap<>();
         this.childNodes = new LinkedMultiValueMap<>();
