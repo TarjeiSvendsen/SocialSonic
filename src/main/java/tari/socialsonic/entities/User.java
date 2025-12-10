@@ -21,7 +21,7 @@ public class User {
     public User(String userName, String password){
         SecureRandom sr = new SecureRandom();
         this.salt = Long.toHexString(sr.nextLong());
-
+        this.userName = userName;
         String tmpPass = password + this.salt;
         this.hashedPassword = DigestUtils.md5Digest(tmpPass.getBytes());
 
