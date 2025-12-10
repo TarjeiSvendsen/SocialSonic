@@ -6,17 +6,22 @@ import tari.socialsonic.entities.ApiKey;
 import tari.socialsonic.utils.database.ApiKeyService;
 import tari.socialsonic.entities.User;
 import tari.socialsonic.utils.ArrayUtils;
+import tari.socialsonic.utils.database.UserService;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 @Component
 public class AuthenticationUtils {
 
     private final ApiKeyService apiKeyService;
+    private final UserService userService;
 
-    public AuthenticationUtils(final ApiKeyService apiKeyService){
+
+    public AuthenticationUtils(final ApiKeyService apiKeyService,final UserService userService){
         this.apiKeyService = apiKeyService;
+        this.userService = userService;
     }
     /**
      * Primary method for authenticating
@@ -34,16 +39,18 @@ public class AuthenticationUtils {
             }
             else if (params.containsKey("t") && params.containsKey("s")){
                 byte[] combination = getTokenSaltCombination(params);
-                return checkSaltedPassword(combination) ? -1 : 40;
+                return checkSaltedPassword(combination,params.get("u"),params.get("s")) ? -1 : 40;
             }
         }
         else return 10;
         return 0;
     }
 
-    public static boolean checkSaltedPassword(byte[] saltedPassword){
-
-        return false;
+    public boolean checkSaltedPassword(byte[] saltedPassword,String username, String salt){
+        User user = userService.getUserByUsername(username);
+        if (user == null) return false;
+        byte[] hashedPassword = user.getHashedPassword();
+        return (hashedPassword == saltedPassword);
     }
 
     public static String generateKey(){
