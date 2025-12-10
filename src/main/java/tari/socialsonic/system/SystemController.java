@@ -20,15 +20,16 @@ public class SystemController {
     }
 
     @GetMapping(value = {"/rest/ping", "/api/v1/ping"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> ping(@RequestParam Map<String, String> params) {
-        int authResult = authUtils.authenticate(params);
-        if (authResult == -1)
-            return responseUtils.generateResponse(params);
-        else return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(authResult));
+    public ResponseEntity<String> getPing(@RequestParam Map<String, String> params) {
+        return ping(params);
     }
 
     @PostMapping(value={"/rest/ping","api/v1/ping"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<String> postPing(@RequestParam Map<String,String> body){
+        return ping(body);
+    }
+
+    private ResponseEntity<String> ping(Map<String,String> body){
         int authResult = authUtils.authenticate(body);
         if (authResult == -1)
             return responseUtils.generateResponse(body);
