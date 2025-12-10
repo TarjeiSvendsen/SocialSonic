@@ -9,7 +9,6 @@ import tari.socialsonic.utils.ArrayUtils;
 import tari.socialsonic.utils.database.UserService;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 @Component
@@ -35,18 +34,18 @@ public class AuthenticationUtils {
         }
         else if(params.containsKey("u")){
             if (params.containsKey("p")){
-                return 42; // Plaintext password isn't secure, therefore it's not supported.
+                return 42; // Plaintext password isn't secure, therefore it's not supported for now.
             }
             else if (params.containsKey("t") && params.containsKey("s")){
                 byte[] combination = getTokenSaltCombination(params);
-                return checkSaltedPassword(combination,params.get("u"),params.get("s")) ? -1 : 40;
+                return checkSaltedPassword(combination,params.get("u")) ? -1 : 40;
             }
         }
         else return 10;
         return 0;
     }
 
-    public boolean checkSaltedPassword(byte[] saltedPassword,String username, String salt){
+    public boolean checkSaltedPassword(byte[] saltedPassword,String username){
         User user = userService.getUserByUsername(username);
         if (user == null) return false;
         byte[] hashedPassword = user.getHashedPassword();
