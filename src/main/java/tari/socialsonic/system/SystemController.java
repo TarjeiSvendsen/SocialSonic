@@ -2,9 +2,7 @@ package tari.socialsonic.system;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tari.socialsonic.utils.auth.AuthenticationUtils;
 import tari.socialsonic.utils.errors.ErrorCodes;
 import tari.socialsonic.utils.response.ResponseUtils;
@@ -29,4 +27,11 @@ public class SystemController {
         else return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(authResult));
     }
 
+    @PostMapping(value={"/rest/ping","api/v1/ping"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    public ResponseEntity<String> postPing(@RequestParam Map<String,String> body){
+        int authResult = authUtils.authenticate(body);
+        if (authResult == -1)
+            return responseUtils.generateResponse(body);
+        else return responseUtils.generateResponse(body, ErrorCodes.createErrorResponseFromCode(authResult));
+    }
 }
