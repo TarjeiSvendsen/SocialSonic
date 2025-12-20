@@ -1,37 +1,50 @@
 package tari.socialsonic.utils.filesystem;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagField;
+
+import java.io.File;
+import java.util.Stack;
 
 public class Scanner {
-    public static int scanRoot(){
-        Map<String,String> tags = new HashMap<>();
-        try {
-            InputStream inputStream = new FileInputStream(""); // Removed for privacy momentarily
-            int zeroOccurrence = 0;
-            byte[] nextBytes = inputStream.readNBytes(180);
-            char[] nextChars = new char[180];
-            for (int i = 0; i < nextBytes.length; i++){
-                if (nextBytes[i] != 0D){
-                    nextChars[i] = (char) nextBytes[i];
-                }
 
+    public Scanner(){
+
+    }
+
+    public int scanRoot(){
+        Stack<File> files = new Stack<>();
+        File libraryRoot = new File("src/main/resources/testMusicLibrary");
+        for (File file: libraryRoot.listFiles()){
+            if (file.isDirectory()){
+                scanDirectory(files,file);
             }
-            System.out.println(nextChars);
+            else files.add(file);
         }
-        catch (Exception e){
-            System.out.println(e);
+        while(!files.isEmpty()){
+            File file = files.pop();
+            try{
+                AudioFile f = AudioFileIO.read(file);
+                Tag tag = f.getTag();
+                // TODO, things
+            }
+            catch (Exception e){
+                System.out.println(e);
+            }
         }
         return 0;
-    };
+    }
 
-    private static String charToString(char[] chars){
-        StringBuilder stringBuilder = new StringBuilder();
-        for (char c: chars){
-            stringBuilder.append(c);
+    public boolean scanDirectory(Stack<File> files, File directory){
+        for (File file: directory.listFiles()){
+            if (file.isDirectory()){
+                scanDirectory(files,file);
+            }
+            else files.add(file);
         }
-        return stringBuilder.toString();
+        return true;
     }
 }

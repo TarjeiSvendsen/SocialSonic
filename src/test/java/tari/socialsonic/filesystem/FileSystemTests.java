@@ -11,8 +11,8 @@ public class FileSystemTests {
 
         @Test
         void checkFileHeader(){
-
-            Scanner.scanRoot();
+            Scanner scanner = new Scanner();
+            scanner.scanRoot();
         }
     }
 }
