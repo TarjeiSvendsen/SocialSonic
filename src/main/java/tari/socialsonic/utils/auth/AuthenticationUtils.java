@@ -2,11 +2,11 @@ package tari.socialsonic.utils.auth;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
-import tari.socialsonic.entities.ApiKey;
-import tari.socialsonic.utils.database.ApiKeyService;
-import tari.socialsonic.entities.User;
+import tari.socialsonic.database.entities.ApiKey;
+import tari.socialsonic.database.ApiKeyService;
+import tari.socialsonic.database.entities.User;
 import tari.socialsonic.utils.ArrayUtils;
-import tari.socialsonic.utils.database.UserService;
+import tari.socialsonic.database.UserService;
 
 import java.util.Map;
 import java.util.Random;

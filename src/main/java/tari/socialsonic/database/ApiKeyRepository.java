@@ -1,8 +1,8 @@
-package tari.socialsonic.utils.database;
+package tari.socialsonic.database;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import tari.socialsonic.entities.ApiKey;
-import tari.socialsonic.entities.User;
+import tari.socialsonic.database.entities.ApiKey;
+import tari.socialsonic.database.entities.User;
 
 import java.time.LocalDate;
 import java.util.List;

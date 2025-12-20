@@ -1,7 +1,7 @@
-package tari.socialsonic.utils.database;
+package tari.socialsonic.database;
 
 import org.springframework.stereotype.Service;
-import tari.socialsonic.entities.User;
+import tari.socialsonic.database.entities.User;
 
 @Service
 public class UserService {
