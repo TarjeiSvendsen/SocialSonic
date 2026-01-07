@@ -29,6 +29,7 @@ public class ResponseUtils {
     }
     public ResponseEntity<String> generateResponse(Map<String,String> params,SubsonicResponse plannedResponse){
         HttpHeaders headers = new HttpHeaders();
+        if (!params.containsKey("f")) params.put("f","xml");
         try {
             if (params.get("f").equals("json")) {
                 headers.setContentType(MediaType.APPLICATION_JSON);
