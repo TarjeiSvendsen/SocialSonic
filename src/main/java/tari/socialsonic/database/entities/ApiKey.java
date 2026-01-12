@@ -12,7 +12,7 @@ public class ApiKey {
     private final String key;
     @ManyToOne
     @NotNull
-    private User issuedBy;
+    private User owner;
     private final LocalDate dateIssued;
     private final LocalDate dateValidTo;
 
@@ -23,7 +23,7 @@ public class ApiKey {
     }
     public ApiKey(User user){
         this();
-        this.issuedBy = user;
+        this.owner = user;
     }
 
     public boolean valid() {

@@ -17,7 +17,7 @@ public class ApiKeyService{
     }
 
     public List<ApiKey> getAllByUser(User user){
-        return apiKeyRepository.getAllByIssuedBy(user);
+        return apiKeyRepository.getAllByOwner(user);
     }
     public List<ApiKey> getAllByDateIssued(LocalDate date){
         return apiKeyRepository.getApiKeysByDateIssued(date);
@@ -25,6 +25,8 @@ public class ApiKeyService{
     public ApiKey getApiKeyByKey(String key){
         return apiKeyRepository.getApiKeyByKey(key);
     }
+    public User getOwner(String key){return apiKeyRepository.getOwnerByKey(key);}
+
     public boolean saveKey(ApiKey key){
         apiKeyRepository.save(key);
         return true;

@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ApiKeyRepository extends JpaRepository<ApiKey,String> {
-    List<ApiKey> getAllByIssuedBy(User issuedBy);
+    List<ApiKey> getAllByOwner(User owner);
     List<ApiKey> getApiKeysByDateIssued(LocalDate dateIssued);
-
+    User getOwnerByKey(String key);
     ApiKey getApiKeyByKey(String key);
 
 
