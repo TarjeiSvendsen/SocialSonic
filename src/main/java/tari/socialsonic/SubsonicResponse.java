@@ -52,7 +52,7 @@ public class SubsonicResponse {
         attributes.put("status","ok");
         attributes.put("version","1.15.1");
         attributes.put("type","SocialSonic-DEV");
-        attributes.put("serverVersion","0.0.1 (Alotta Fagina)");
+        attributes.put("serverVersion","0.0.3");
         attributes.put("openSubSonic",true);
     }
 
