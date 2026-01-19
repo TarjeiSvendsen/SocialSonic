@@ -1,4 +1,4 @@
-package tari.socialsonic;
+package tari.socialsonic.utils.auth;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -9,8 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import tari.socialsonic.utils.auth.AuthenticationUtils;
 
 import java.util.HashMap;
 import java.util.Map;

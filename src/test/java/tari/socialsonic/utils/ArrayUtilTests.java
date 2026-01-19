@@ -1,10 +1,9 @@
-package tari.socialsonic;
+package tari.socialsonic.utils;
 
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import tari.socialsonic.utils.ArrayUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 

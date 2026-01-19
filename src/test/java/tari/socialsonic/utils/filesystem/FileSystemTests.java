@@ -1,4 +1,4 @@
-package tari.socialsonic.filesystem;
+package tari.socialsonic.utils.filesystem;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
