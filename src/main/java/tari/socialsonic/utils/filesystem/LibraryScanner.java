@@ -2,16 +2,14 @@ package tari.socialsonic.utils.filesystem;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagField;
 
 import java.io.File;
 import java.util.Stack;
 
-public class Scanner {
+public class LibraryScanner {
 
-    public Scanner(){
+    public LibraryScanner(){
 
     }
 
