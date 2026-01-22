@@ -19,8 +19,4 @@ public class UserService {
         return userRepository.getUserById(id);
     }
 
-    //@Scheduled(fixedDelay = )
-    public void bonk(){
-
-    }
 }
