@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import tari.socialsonic.SubsonicResponse;
 import tari.socialsonic.database.ApiKeyService;
 import tari.socialsonic.database.UserService;
-import tari.socialsonic.database.entities.User;
+import tari.socialsonic.database.models.User;
 import tari.socialsonic.utils.auth.AuthenticationUtils;
 import tari.socialsonic.utils.errors.ErrorCodes;
 import tari.socialsonic.utils.response.ResponseUtils;

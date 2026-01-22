@@ -1,4 +1,4 @@
-package tari.socialsonic.database.entities;
+package tari.socialsonic.database.models;
 
 import jakarta.persistence.*;
 import org.springframework.util.DigestUtils;

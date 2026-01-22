@@ -2,9 +2,9 @@ package tari.socialsonic.utils.auth;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
-import tari.socialsonic.database.entities.ApiKey;
+import tari.socialsonic.database.models.ApiKey;
 import tari.socialsonic.database.ApiKeyService;
-import tari.socialsonic.database.entities.User;
+import tari.socialsonic.database.models.User;
 import tari.socialsonic.utils.ArrayUtils;
 import tari.socialsonic.database.UserService;
 

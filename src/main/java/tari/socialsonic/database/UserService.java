@@ -1,7 +1,7 @@
 package tari.socialsonic.database;
 
 import org.springframework.stereotype.Service;
-import tari.socialsonic.database.entities.User;
+import tari.socialsonic.database.models.User;
 
 @Service
 public class UserService {
@@ -17,5 +17,10 @@ public class UserService {
     }
     public User getUserById(int id){
         return userRepository.getUserById(id);
+    }
+
+    //@Scheduled(fixedDelay = )
+    public void bonk(){
+
     }
 }
