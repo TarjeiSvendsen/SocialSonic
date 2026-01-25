@@ -62,6 +62,38 @@ public class User {
         this.hashedPassword = hashedPassword;
     }
 
+    public String getRoles(){
+        return roles;
+    }
+
+    /**
+     * Gets the status of the requested user role
+     * @param role The role to be found in the form of a String.
+     * @return An Integer, 1 for role being active, o for inactive, and -1 for not found
+     */
+    public int getUserRoleStatus(String role){
+        return findAndAlterRole(role,null);
+    }
+
+    /**
+     * Activates the given role, does NOT check for permission to actually do so.
+     * @param role The role to be changed.
+     * @return A boolean representing the result, true for successfully activating the role,
+     * false if it could not find the role.
+     */
+    public boolean activateRole(String role){
+        return findAndAlterRole(role, (c) -> c = 1) != -1;
+    }
+
+    /**
+     * Disables the requested role, does NOT check for permission to actually do so.
+     * @param role The role to be changed.
+     * @return A boolean representing the result, true for successfully activating the role,
+     * false if it could not find the role.
+     */
+    public boolean disableRole(String role){
+        return findAndAlterRole(role,(c) -> c = 0) != 0;
+    }
 
     /**
      * Finds and alters a given role using the functional interface; {@link RoleFunction}.
