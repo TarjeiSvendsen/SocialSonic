@@ -5,6 +5,7 @@ import org.springframework.util.DigestUtils;
 import tari.socialsonic.database.models.ApiKey;
 import tari.socialsonic.database.ApiKeyService;
 import tari.socialsonic.database.models.User;
+import tari.socialsonic.user.RoleFunction;
 import tari.socialsonic.utils.ArrayUtils;
 import tari.socialsonic.database.UserService;
 
@@ -33,21 +34,21 @@ public class AuthenticationUtils {
             return validateApiKey(params.get("apiKey")) ? -1 : 44;
         }
         else if(params.containsKey("u")){
+            User tmpUser = userService.getUserByUsername(params.get("u"));
+            if (tmpUser == null) return 40;
             if (params.containsKey("p")){
                 return 42; // Plaintext password isn't secure, therefore it's not supported for now.
             }
             else if (params.containsKey("t") && params.containsKey("s")){
                 byte[] combination = getTokenSaltCombination(params);
-                return checkSaltedPassword(combination,params.get("u")) ? -1 : 40;
+                return checkSaltedPassword(combination,tmpUser) ? -1 : 40;
             }
         }
         else return 10;
         return 0;
     }
 
-    public boolean checkSaltedPassword(byte[] saltedPassword,String username){
-        User user = userService.getUserByUsername(username);
-        if (user == null) return false;
+    public boolean checkSaltedPassword(byte[] saltedPassword,User user){
         byte[] hashedPassword = user.getHashedPassword();
         return (hashedPassword == saltedPassword);
     }
