@@ -2,6 +2,7 @@ package tari.socialsonic.database.models;
 
 import jakarta.persistence.*;
 import org.springframework.util.DigestUtils;
+import tari.socialsonic.user.RoleFunction;
 
 import java.security.SecureRandom;
 
@@ -162,8 +163,4 @@ public class User {
     public void setLdapAuthenticated(boolean ldapAuthenticated) {
         this.ldapAuthenticated = ldapAuthenticated;
     }
-}
-@FunctionalInterface
-interface RoleFunction{
-    void action(char role);
 }
