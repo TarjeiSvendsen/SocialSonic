@@ -63,6 +63,42 @@ public class AuthenticationUtils {
         return apikey;
     }
 
+     /**
+     * Checks if user has the administrator role.
+     * @param user The {@link User} to check.
+     * @return A boolean indicating whether the user has the admin role.
+     */
+    public boolean isUserAdmin(User user){
+        return user.getUserRoleStatus("adminRole") == 1;
+    }
+
+    /**
+     * Checks if user has the administrator role.
+     * @param params The request params of the request.
+     * @return A boolean indicating whether the user has the admin role.
+     */
+    public boolean isUserAdmin(Map<String,String> params){
+        return isUserAdmin(getUserFromParams(params));
+    }
+
+     /**
+     * Gets the {@link User} object from the DB using the params from a request.
+     * @param params The parameters used in a request, contains either username or apiKey field,
+     * as this method should be used only after weeding out bad requests
+     * containing none of the aforementioned values.
+     * @return The {@link User} object.
+     */
+    private User getUserFromParams(Map<String,String> params){
+        User tmpUser;
+        if (params.containsKey("u")){
+            tmpUser = userService.getUserByUsername(params.get("u"));
+        }
+        else{
+            tmpUser = apiKeyService.getOwner(params.get("apiKey"));
+        }
+        return tmpUser;
+    }
+
     public boolean validateApiKey(String apiKey){
         ApiKey tmpKey = apiKeyService.getApiKeyByKey(apiKey);
         if (tmpKey == null) return false;
