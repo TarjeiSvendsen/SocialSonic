@@ -84,9 +84,10 @@ public class User {
      * false equals failure finding the role, or changing a role to false.
      */
     public boolean changeRoleStatus(String role, boolean status){
-        return findAndAlterRole(role, (c) -> {
-            if (status) c = 1;
-            else c = 0;
+        return findAndAlterRole(role, (c,index) -> {
+            if (status) {
+                c[index] = '1';
+            } else c[index] = '0';
         }) == 1;
     }
 
@@ -141,7 +142,7 @@ public class User {
                 return -1;
         }
 
-        rf.action(tmpRoles[indexToModify]);
+        rf.action(tmpRoles,indexToModify);
 
         StringBuilder builder = new StringBuilder();
         for (char i: tmpRoles)
