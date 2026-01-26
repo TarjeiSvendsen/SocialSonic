@@ -77,23 +77,17 @@ public class User {
     }
 
     /**
-     * Activates the given role, does NOT check for permission to actually do so.
-     * @param role The role to be changed.
-     * @return A boolean representing the result, true for successfully activating the role,
-     * false if it could not find the role.
+     * Changes the requested role to the requested status.
+     * @param role The role to change,
+     * @param status The status to change the role to.
+     * @return A boolean, true equals success,
+     * false equals failure finding the role, or changing a role to false.
      */
-    public boolean activateRole(String role){
-        return findAndAlterRole(role, (c) -> c = 1) != -1;
-    }
-
-    /**
-     * Disables the requested role, does NOT check for permission to actually do so.
-     * @param role The role to be changed.
-     * @return A boolean representing the result, true for successfully activating the role,
-     * false if it could not find the role.
-     */
-    public boolean disableRole(String role){
-        return findAndAlterRole(role,(c) -> c = 0) != 0;
+    public boolean changeRoleStatus(String role, boolean status){
+        return findAndAlterRole(role, (c) -> {
+            if (status) c = 1;
+            else c = 0;
+        }) == 1;
     }
 
     /**
