@@ -80,14 +80,14 @@ public class AuthenticationTests {
         @Test
         public void userIsAdminAfterChange(){
             User user = new User();
-            user.changeRoleStatus("adminRole",true);
+            user.setRoleStatus("adminRole",true);
             assertFalse(utils.isUserAdmin(user));
         }
         @Test
         public void userRolesRepresentChange(){
             User user = new User();
             String expected = "011000000001";
-            user.changeRoleStatus("videoConversionRole",true);
+            user.setRoleStatus("videoConversionRole",true);
             assertEquals(expected,user.getRoles());
         }
     }
