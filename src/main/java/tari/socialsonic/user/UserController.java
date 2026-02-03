@@ -65,8 +65,8 @@ public class UserController {
                     case "adminRole":
                         if(!isUserAdmin && params.get(key).equals("true")) // Admins can only create new admins.
                             return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(50));
-                        newUser.changeRoleStatus("adminRole",true);
-                    break;
+                        else newUser.setRoleStatus("adminRole", isUserAdmin);
+                        break;
                     default:
                         break;
                 }

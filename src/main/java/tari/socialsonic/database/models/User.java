@@ -84,7 +84,7 @@ public class User {
      * @return A boolean, true equals success,
      * false equals failure finding the role, or changing a role to false.
      */
-    public boolean changeRoleStatus(String role, boolean status){
+    public boolean setRoleStatus(String role, boolean status){
         return findAndAlterRole(role, (c,index) -> {
             if (status) {
                 c[index] = '1';
