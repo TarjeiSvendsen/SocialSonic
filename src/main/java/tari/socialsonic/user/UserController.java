@@ -42,6 +42,9 @@ public class UserController {
 
     private ResponseEntity<String> createUser(Map<String,String> params){
         int authResult = authUtils.authenticate(params);
+        boolean isUserAdmin = authUtils.isUserAdmin(params);
+        if ( !isUserAdmin && Objects.equals(environment.getProperty("SOCIALSONIC_NON_ADMIN_USER_CREATION"),"false"))
+            return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(50));
         User newUser = new User();
         if (authResult == -1) {
             for (String key: params.keySet()){
@@ -60,10 +63,15 @@ public class UserController {
                             newUser.setLdapAuthenticated(true);
                         break;
                     case "adminRole":
-                        if (authUtils.isUserAdmin(params)) newUser.changeRoleStatus("adminRole",true);
-                        else return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(50));
+                        if(!isUserAdmin && params.get(key).equals("true")) // Admins can only create new admins.
+                            return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(50));
+                        newUser.changeRoleStatus("adminRole",true);
+                    break;
+                    default:
+                        break;
                 }
             }
+            userService.save(newUser);
             return responseUtils.generateResponse(params, new SubsonicResponse(true));
         }
         else return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(authResult));

@@ -76,6 +76,7 @@ public class User {
         return findAndAlterRole(role,null);
     }
 
+    // TODO, look into moving this logic into dedicated helper class.
     /**
      * Changes the requested role to the requested status.
      * @param role The role to change,
