@@ -19,4 +19,7 @@ public class UserService {
         return userRepository.getUserById(id);
     }
 
+    public void save(User user){
+        userRepository.save(user);
+    }
 }
