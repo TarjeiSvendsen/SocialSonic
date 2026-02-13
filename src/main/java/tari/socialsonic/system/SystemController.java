@@ -49,15 +49,16 @@ public class SystemController {
     }
 
     //
-    @GetMapping(value= {"/rest/tokenInfo",""}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value= {"/rest/tokenInfo","/api/v1/tokenInfo"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getTokenInfo(@RequestParam Map<String, String> params){
         return tokenInfo(params);
     }
 
-    @PostMapping(value={"/rest/tokenInfo","api/v1/ping"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @PostMapping(value={"/rest/tokenInfo","/api/v1/tokenInfo"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<String> postTokenInfo(@RequestParam Map<String,String> body){
         return tokenInfo(body);
     }
+
     private ResponseEntity<String> tokenInfo(Map<String,String> body){
         int authResult = authUtils.authenticate(body);
         
