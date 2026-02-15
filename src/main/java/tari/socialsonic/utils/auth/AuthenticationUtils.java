@@ -2,12 +2,11 @@ package tari.socialsonic.utils.auth;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
-import tari.socialsonic.database.models.ApiKey;
-import tari.socialsonic.database.ApiKeyService;
-import tari.socialsonic.database.models.User;
-import tari.socialsonic.user.RoleFunction;
+import tari.socialsonic.database.apiKey.ApiKey;
+import tari.socialsonic.database.apiKey.ApiKeyService;
+import tari.socialsonic.database.user.User;
 import tari.socialsonic.utils.ArrayUtils;
-import tari.socialsonic.database.UserService;
+import tari.socialsonic.database.user.UserService;
 
 import java.util.Map;
 import java.util.Random;
@@ -63,22 +62,13 @@ public class AuthenticationUtils {
         return apikey;
     }
 
-     /**
-     * Checks if user has the administrator role.
-     * @param user The {@link User} to check.
-     * @return A boolean indicating whether the user has the admin role.
-     */
-    public boolean isUserAdmin(User user){
-        return user.getUserRoleStatus("adminRole") == 1;
-    }
-
     /**
      * Checks if user has the administrator role.
      * @param params The request params of the request.
      * @return A boolean indicating whether the user has the admin role.
      */
     public boolean isUserAdmin(Map<String,String> params){
-        return isUserAdmin(getUserFromParams(params));
+        return UserUtils.isUserAdmin(getUserFromParams(params));
     }
 
      /**
