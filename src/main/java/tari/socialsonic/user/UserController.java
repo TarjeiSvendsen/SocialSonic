@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tari.socialsonic.SubsonicResponse;
-import tari.socialsonic.database.ApiKeyService;
-import tari.socialsonic.database.UserService;
-import tari.socialsonic.database.models.User;
+import tari.socialsonic.database.apiKey.ApiKeyService;
+import tari.socialsonic.database.user.UserService;
+import tari.socialsonic.database.user.User;
 import tari.socialsonic.utils.auth.AuthenticationUtils;
+import tari.socialsonic.utils.auth.UserUtils;
 import tari.socialsonic.utils.errors.ErrorCodes;
 import tari.socialsonic.utils.response.ResponseUtils;
 
@@ -59,13 +60,14 @@ public class UserController {
                         newUser.setEmail(params.get(key));
                         break;
                     case "ldapAuthenticated":
+                        // TODO, should be handled differently, as this can currently just be manually specified.
                         if (Objects.equals(params.get(key), "true"))
                             newUser.setLdapAuthenticated(true);
                         break;
                     case "adminRole":
                         if(!isUserAdmin && params.get(key).equals("true")) // Admins can only create new admins.
                             return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(50));
-                        else newUser.setRoleStatus("adminRole", isUserAdmin);
+                        else UserUtils.setRoleStatus(newUser,"adminRole", isUserAdmin);
                         break;
                     default:
                         break;
