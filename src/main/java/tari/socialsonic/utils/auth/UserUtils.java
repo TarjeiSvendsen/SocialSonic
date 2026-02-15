@@ -8,7 +8,7 @@ public class UserUtils {
 
     /**
      * Finds and alters a given role using the functional interface; {@link RoleFunction}.
-     * @param user The user object to be altered
+     * @param user The {@link User} object to be altered
      * @param role the role to be changed.
      * @param rf The function to call on the role.
      * @return A string, containing the updated set of roles.
@@ -86,12 +86,13 @@ public class UserUtils {
             if (status) {
                 c[index] = '1';
             } else c[index] = '0';
+            System.out.println(c);
         }));
     }
 
     /**
      * Gets the current status of a role.
-     * @param user the user object to get roles from
+     * @param user the {@link User} object to get roles from
      * @param role the role to get the current status of
      * @return a boolean.
      */
@@ -99,9 +100,19 @@ public class UserUtils {
         final boolean[] returnStatus = new boolean[1];
         findAndAlterRole(user,role,(c,index)-> {
             // This feels hacky, should probably be changed?
-            if (c[index] == '1') returnStatus[0] = true;
-            else returnStatus[0] = false;
+            returnStatus[0] = c[index] == '1';
         });
         return returnStatus[0];
     }
+
+    /**
+     * Checks if user has the administrator role.
+     * @param user The {@link User} to check.
+     * @return A boolean indicating whether the user has the admin role.
+     */
+    public static boolean isUserAdmin(User user){
+        return getRoleStatus(user,"adminRole");
+    }
+
+
 }
