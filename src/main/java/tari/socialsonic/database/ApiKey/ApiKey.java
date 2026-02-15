@@ -1,7 +1,8 @@
-package tari.socialsonic.database.models;
+package tari.socialsonic.database.ApiKey;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import tari.socialsonic.database.user.User;
 import tari.socialsonic.utils.auth.AuthenticationUtils;
 
 import java.time.LocalDate;
