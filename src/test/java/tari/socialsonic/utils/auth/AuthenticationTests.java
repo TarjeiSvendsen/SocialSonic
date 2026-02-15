@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import tari.socialsonic.database.models.User;
+import tari.socialsonic.database.user.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,19 +75,19 @@ public class AuthenticationTests {
         @Test
         public void userIsNotAdminByDefault(){
             User user = new User();
-            assertFalse(utils.isUserAdmin(user));
+            assertFalse(UserUtils.isUserAdmin(user));
         }
         @Test
         public void userIsAdminAfterChange(){
             User user = new User();
-            user.setRoleStatus("adminRole",true);
-            assertFalse(utils.isUserAdmin(user));
+            UserUtils.setRoleStatus(user,"adminRole",true);
+            assertTrue(UserUtils.isUserAdmin(user));
         }
         @Test
         public void userRolesRepresentChange(){
             User user = new User();
             String expected = "011000000001";
-            user.setRoleStatus("videoConversionRole",true);
+            UserUtils.setRoleStatus(user,"videoConversionRole",true);
             assertEquals(expected,user.getRoles());
         }
     }
