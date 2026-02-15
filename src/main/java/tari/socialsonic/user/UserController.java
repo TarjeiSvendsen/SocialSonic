@@ -43,11 +43,11 @@ public class UserController {
 
     private ResponseEntity<String> createUser(Map<String,String> params){
         int authResult = authUtils.authenticate(params);
-        boolean isUserAdmin = authUtils.isUserAdmin(params);
-        if ( !isUserAdmin && Objects.equals(environment.getProperty("SOCIALSONIC_NON_ADMIN_USER_CREATION"),"false"))
-            return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(50));
-        User newUser = new User();
         if (authResult == -1) {
+            boolean isUserAdmin = authUtils.isUserAdmin(params);
+            if ( !isUserAdmin && Objects.equals(environment.getProperty("SOCIALSONIC_NON_ADMIN_USER_CREATION"),"false"))
+                return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(50));
+            User newUser = new User();
             for (String key: params.keySet()){
                 switch (key){
                     case "username":
