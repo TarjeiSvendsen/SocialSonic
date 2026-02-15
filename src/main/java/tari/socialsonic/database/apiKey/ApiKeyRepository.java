@@ -1,4 +1,4 @@
-package tari.socialsonic.database.ApiKey;
+package tari.socialsonic.database.apiKey;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import tari.socialsonic.database.user.User;

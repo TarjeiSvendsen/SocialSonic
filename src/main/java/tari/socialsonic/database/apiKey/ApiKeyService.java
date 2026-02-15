@@ -1,4 +1,4 @@
-package tari.socialsonic.database.ApiKey;
+package tari.socialsonic.database.apiKey;
 
 import org.springframework.stereotype.Service;
 import tari.socialsonic.database.user.User;

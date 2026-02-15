@@ -1,4 +1,4 @@
-package tari.socialsonic.database.ApiKey;
+package tari.socialsonic.database.apiKey;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
