@@ -11,7 +11,8 @@ import java.time.LocalDate;
 public class ApiKey {
     @Id
     private final String key;
-    @ManyToOne
+    @ManyToOne(targetEntity = User.class,cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id",name = "owner_id")
     @NotNull
     private User owner;
     private final LocalDate dateIssued;
@@ -36,5 +37,9 @@ public class ApiKey {
     }
     public String getKey() {
         return key;
+    }
+
+    public User getOwner(){
+        return owner;
     }
 }

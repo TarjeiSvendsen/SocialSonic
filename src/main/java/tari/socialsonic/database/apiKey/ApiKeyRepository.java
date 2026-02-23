@@ -9,7 +9,7 @@ import java.util.List;
 public interface ApiKeyRepository extends JpaRepository<ApiKey,String> {
     List<ApiKey> getAllByOwner(User owner);
     List<ApiKey> getApiKeysByDateIssued(LocalDate dateIssued);
-    User getOwnerByKey(String key);
+    ApiKey getOwnerByKey(String key);
     ApiKey getApiKeyByKey(String key);
 
 
