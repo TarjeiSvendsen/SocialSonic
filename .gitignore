@@ -15,6 +15,7 @@ target/
 
 ### Secrets ###
 .env
+internal.env
 
 ### API Testing ###
 /src/main/resources/testing/

@@ -19,7 +19,9 @@ COPY --from=builder /builder/extracted/dependencies/ ./
 COPY --from=builder /builder/extracted/spring-boot-loader/ ./
 COPY --from=builder /builder/extracted/snapshot-dependencies/ ./
 COPY --from=builder /builder/extracted/application/ ./
+COPY ./src/main/resources/application.yml ./
+COPY internal.env ./
 # Start the application jar - this is not the uber jar used by the builder
 # This jar only contains application code and references to the extracted jar files
 # This layout is efficient to start up and AOT cache (and CDS) friendly
-ENTRYPOINT ["java", "-jar", "application.jar"]
+ENTRYPOINT ["java", "-jar", "application.jar", "--spring.config.location=/application/application.yml"]
