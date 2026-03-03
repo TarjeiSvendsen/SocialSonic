@@ -2,9 +2,6 @@ package tari.socialsonic.database.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import org.springframework.util.DigestUtils;
-
-import java.security.SecureRandom;
 
 @Entity
 @Table(name = "social_users")
@@ -23,14 +20,6 @@ public class User {
     public User(){
     }
 
-    public User(String userName, String password){
-        SecureRandom sr = new SecureRandom();
-        this.salt = Long.toHexString(sr.nextLong());
-        this.userName = userName;
-        String tmpPass = password + this.salt;
-        this.hashedPassword = DigestUtils.md5Digest(tmpPass.getBytes());
-
-    }
     public int getId() {
         return id;
     }
@@ -53,6 +42,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSalt(){
+        return salt;
+    }
+
+    public void setSalt(String salt){
+        this.salt = salt;
     }
 
     public byte[] getHashedPassword() {

@@ -1,13 +1,16 @@
 package tari.socialsonic.utils.auth;
 
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.util.DigestUtils;
 import tari.socialsonic.database.apiKey.ApiKey;
 import tari.socialsonic.database.apiKey.ApiKeyService;
 import tari.socialsonic.database.user.User;
-import tari.socialsonic.utils.ArrayUtils;
 import tari.socialsonic.database.user.UserService;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 
@@ -16,11 +19,13 @@ public class AuthenticationUtils {
 
     private final ApiKeyService apiKeyService;
     private final UserService userService;
+    private final Environment environment;
 
 
-    public AuthenticationUtils(final ApiKeyService apiKeyService,final UserService userService){
+    public AuthenticationUtils(final ApiKeyService apiKeyService, final UserService userService, Environment environment){
         this.apiKeyService = apiKeyService;
         this.userService = userService;
+        this.environment = environment;
     }
     /**
      * Primary method for authenticating
@@ -29,27 +34,49 @@ public class AuthenticationUtils {
      */
     public int authenticate(Map<String,String> params){
         if (params.containsKey("apiKey")){
-            if (params.containsKey("u")) return 43;
+            if (params.containsKey("u") || params.containsKey("t") || params.containsKey("s")) return 43;
             return validateApiKey(params.get("apiKey")) ? -1 : 44;
         }
         else if(params.containsKey("u")){
             User tmpUser = userService.getUserByUsername(params.get("u"));
             if (tmpUser == null) return 40;
             if (params.containsKey("p")){
-                return 42; // Plaintext password isn't secure, therefore it's not supported for now.
+                return comparePassword(params.get("p"), tmpUser) ? -1 : 40;
             }
             else if (params.containsKey("t") && params.containsKey("s")){
-                byte[] combination = getTokenSaltCombination(params);
-                return checkSaltedPassword(combination,tmpUser) ? -1 : 40;
+                // According to official spec, when api key based auth is available, s+t based auth should be deprecated.
+                return 42;
             }
+            else return 10;
         }
         else return 10;
-        return 0;
     }
 
     public boolean checkSaltedPassword(byte[] saltedPassword,User user){
         byte[] hashedPassword = user.getHashedPassword();
         return (hashedPassword == saltedPassword);
+    private boolean comparePassword(String password,User user){
+        byte[] sentPassword = hashPassword(user.getSalt(),password);
+        return Arrays.equals(sentPassword, user.getHashedPassword());
+    }
+    /**
+     * Hashes password using SHA-512 (TODO Will be bcrypt once refactor to spring security is done)
+     * @param salt The salt to use.
+     * @param passwordToHash the password to be hashed.
+     * @return a byte array containing the hashed password.
+     */
+    private byte[] hashPassword(String salt, String passwordToHash){
+        MessageDigest md;
+        try {
+            // TODO, refactor to Spring Security, so bcrypt can be utilized.
+            md = MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        md.update(salt.getBytes());
+        return md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
+    }
+
     }
 
     public static String generateKey(){
@@ -93,10 +120,5 @@ public class AuthenticationUtils {
         ApiKey tmpKey = apiKeyService.getApiKeyByKey(apiKey);
         if (tmpKey == null) return false;
         else return tmpKey.valid();
-    }
-    public byte[] getTokenSaltCombination(Map<String,String> params){
-        byte[] salt = params.get("s").getBytes();
-        byte[] token = params.get("t").getBytes();
-        return DigestUtils.md5Digest(ArrayUtils.mergeByteArrays(salt,token));
     }
 }
