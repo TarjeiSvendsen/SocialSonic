@@ -15,9 +15,16 @@ public class User {
     private String salt;
     private byte[] hashedPassword;
     private boolean ldapAuthenticated;
-    private String roles = "011000000000";
+
+    @OneToOne
+    @JoinColumn(name = "roles",referencedColumnName = "id")
+    private UserRoles roles;
 
     public User(){
+        this.roles = new UserRoles();
+    }
+    public User(UserRoles roles){
+        this.roles = roles;
     }
 
     public int getId() {
@@ -61,11 +68,11 @@ public class User {
         this.hashedPassword = hashedPassword;
     }
 
-    public String getRoles(){
+    public UserRoles getRoles(){
         return roles;
     }
 
-    public void setRoles(String roles){
+    public void setRoles(UserRoles roles){
         this.roles = roles;
     }
 
