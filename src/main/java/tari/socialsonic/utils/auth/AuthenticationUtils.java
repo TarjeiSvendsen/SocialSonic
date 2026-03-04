@@ -52,9 +52,6 @@ public class AuthenticationUtils {
         else return 10;
     }
 
-    public boolean checkSaltedPassword(byte[] saltedPassword,User user){
-        byte[] hashedPassword = user.getHashedPassword();
-        return (hashedPassword == saltedPassword);
     private boolean comparePassword(String password,User user){
         byte[] sentPassword = hashPassword(user.getSalt(),password);
         return Arrays.equals(sentPassword, user.getHashedPassword());
@@ -65,7 +62,7 @@ public class AuthenticationUtils {
      * @param passwordToHash the password to be hashed.
      * @return a byte array containing the hashed password.
      */
-    private byte[] hashPassword(String salt, String passwordToHash){
+    public byte[] hashPassword(byte[] salt, String passwordToHash){
         MessageDigest md;
         try {
             // TODO, refactor to Spring Security, so bcrypt can be utilized.
@@ -73,10 +70,16 @@ public class AuthenticationUtils {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-        md.update(salt.getBytes());
+        md.update(salt);
         return md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
     }
 
+    /**
+     * Checks if a password is in clear text, as by the standard, encoded passwords should start with {@code enc: }
+     * @return A boolean, yes if clear text, no if not.
+     */
+    private boolean passwordIsClearText(String password){
+        return !password.startsWith("enc:");
     }
 
     public static String generateKey(){

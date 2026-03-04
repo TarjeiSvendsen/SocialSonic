@@ -2,6 +2,8 @@ package tari.socialsonic.database.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import tari.socialsonic.database.user.roles.UserRoles;
 
 @Entity
 @Table(name = "social_users")
@@ -9,10 +11,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
     private String userName;
+    @NotNull
     @Email
     private String email;
-    private String salt;
+    private byte[] salt;
+    @NotNull
     private byte[] hashedPassword;
     private boolean ldapAuthenticated;
 
@@ -51,11 +56,11 @@ public class User {
         this.email = email;
     }
 
-    public String getSalt(){
+    public byte[] getSalt(){
         return salt;
     }
 
-    public void setSalt(String salt){
+    public void setSalt(byte[] salt){
         this.salt = salt;
     }
 

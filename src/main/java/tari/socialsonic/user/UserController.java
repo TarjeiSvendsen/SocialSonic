@@ -10,11 +10,11 @@ import tari.socialsonic.SubsonicResponse;
 import tari.socialsonic.database.apiKey.ApiKeyService;
 import tari.socialsonic.database.user.UserService;
 import tari.socialsonic.database.user.User;
+import tari.socialsonic.database.user.roles.UserRoleService;
 import tari.socialsonic.utils.auth.AuthenticationUtils;
 import tari.socialsonic.utils.auth.UserUtils;
 import tari.socialsonic.utils.errors.ErrorCodes;
 import tari.socialsonic.utils.response.ResponseUtils;
-
 import java.util.Map;
 import java.util.Objects;
 
@@ -24,14 +24,16 @@ public class UserController {
     private final ResponseUtils responseUtils;
     private final AuthenticationUtils authUtils;
     private final ApiKeyService apiKeyService;
+    private final UserRoleService userRoleService;
     private final UserService userService;
     // Not currently used, but can be useful for later...
     private final Environment environment;
 
-    public UserController(ResponseUtils responseUtils, AuthenticationUtils authUtils, ApiKeyService apiKeyService, UserService userService, Environment environment) {
+    public UserController(ResponseUtils responseUtils, AuthenticationUtils authUtils, ApiKeyService apiKeyService, UserRoleService userRoleService, UserService userService, Environment environment) {
         this.responseUtils = responseUtils;
         this.authUtils = authUtils;
         this.apiKeyService = apiKeyService;
+        this.userRoleService = userRoleService;
         this.userService = userService;
         this.environment = environment;
     }
@@ -45,8 +47,12 @@ public class UserController {
         int authResult = authUtils.authenticate(params);
         if (authResult == -1) {
             boolean isUserAdmin = authUtils.isUserAdmin(params);
-            if ( !isUserAdmin && Objects.equals(environment.getProperty("SOCIALSONIC_NON_ADMIN_USER_CREATION"),"false"))
+            if ( !isUserAdmin && Objects.equals(environment.getProperty("SCS_NON_ADMIN_USER_CREATION"),"false")
+                    || !isUserAdmin && params.get("adminRole").equals("true")){
                 return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(50));
+            }
+            if (!containsParams(params,new String[]{"username","password","email"}))
+                return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(10));
             User newUser = new User();
             for (String key: params.keySet()){
                 switch (key){
@@ -54,7 +60,8 @@ public class UserController {
                         newUser.setUserName(params.get(key));
                         break;
                     case "password":
-                        // TODO, add method to directly add password
+                        newUser.setSalt(UserUtils.generateSalt());
+                        newUser.setHashedPassword(authUtils.hashPassword(newUser.getSalt(), params.get(key)));
                         break;
                     case "email":
                         newUser.setEmail(params.get(key));
@@ -64,18 +71,22 @@ public class UserController {
                         if (Objects.equals(params.get(key), "true"))
                             newUser.setLdapAuthenticated(true);
                         break;
-                    case "adminRole":
-                        if(!isUserAdmin && params.get(key).equals("true")) // Admins can only create new admins.
-                            return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(50));
-                        else UserUtils.setRoleStatus(newUser,"adminRole", isUserAdmin);
-                        break;
                     default:
                         break;
                 }
             }
+            newUser.setRoles(UserUtils.setRoles(params,isUserAdmin));
+            userRoleService.save(newUser.getRoles());
             userService.save(newUser);
             return responseUtils.generateResponse(params, new SubsonicResponse(true));
         }
         else return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(authResult));
+    }
+
+    private boolean containsParams(Map<String,String> params,String[] toMatch){
+        for (String s: toMatch){
+            if (!params.containsKey(s)) return false;
+        }
+        return true;
     }
 }

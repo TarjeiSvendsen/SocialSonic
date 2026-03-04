@@ -74,5 +74,11 @@ public class UserUtils {
         return user.getRoles().hasAdminRole();
     }
 
+    public static byte[] generateSalt(){
+        SecureRandom sr = new SecureRandom();
+        byte[] tmp = new byte[16];
+        sr.nextBytes(tmp);
+        return tmp;
+    }
 
 }
