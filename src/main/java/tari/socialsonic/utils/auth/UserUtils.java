@@ -2,7 +2,6 @@ package tari.socialsonic.utils.auth;
 
 import tari.socialsonic.database.user.User;
 import tari.socialsonic.database.user.roles.UserRoles;
-import tari.socialsonic.user.RoleFunction;
 
 import java.security.SecureRandom;
 import java.util.Map;
@@ -12,7 +11,7 @@ public class UserUtils {
 
 
     /**
-     * Finds and alters a given role using the functional interface; {@link RoleFunction}.
+     * Sets the roles according to the ones provided with {@code params}.
      * @param params the parameters to parse, provided by a get, or post mapping in a controller.
      * @param isUserAdmin passed along to make sure no user gets roles they are not entitled to.
      * @return A string, containing the updated set of roles.
