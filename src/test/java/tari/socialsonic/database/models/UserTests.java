@@ -6,21 +6,28 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tari.socialsonic.database.user.User;
+import tari.socialsonic.database.user.roles.UserRoles;
 import tari.socialsonic.utils.auth.UserUtils;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 @Tag("UnitTests")
-@ExtendWith(MockitoExtension.class)
 class UserTests {
 
     @Nested
     class UserRoleTests{
         @Test
-        public void switchRoleOutputsCorrect(){
-            String expected = "011000000000";
-            User testUser = new User();
-            UserUtils.setRoleStatus(testUser,"adminRole",false);
-            assertEquals(expected,testUser.getRoles());
+        public void adminRoleIsFalseOnCreation(){
+            UserRoles roles = new UserRoles();
+            assertFalse(roles.hasAdminRole());
+        }
+        @Test
+        public void userRolesMatchDefaultWhenCreatedByUserUtilsWithEmptyParams(){
+            UserRoles roles = UserUtils.setRoles(new HashMap<>(),false);
+            assertFalse(roles.hasAdminRole());
+            assertTrue(roles.hasStreamRole());
         }
 
     }

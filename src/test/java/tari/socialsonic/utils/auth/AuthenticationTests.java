@@ -71,7 +71,8 @@ public class AuthenticationTests {
 
 
     }
-    @Nested class UserRoleUtilTests{
+    @Nested
+    class UserRoleUtilTests{
         @Test
         public void userIsNotAdminByDefault(){
             User user = new User();
@@ -80,15 +81,14 @@ public class AuthenticationTests {
         @Test
         public void userIsAdminAfterChange(){
             User user = new User();
-            UserUtils.setRoleStatus(user,"adminRole",true);
+            user.getRoles().setAdminRole(true);
             assertTrue(UserUtils.isUserAdmin(user));
         }
         @Test
         public void userRolesRepresentChange(){
             User user = new User();
-            String expected = "011000000001";
-            UserUtils.setRoleStatus(user,"videoConversionRole",true);
-            assertEquals(expected,user.getRoles());
+            user.getRoles().setVideoConversionRole(true);
+            assertTrue(user.getRoles().hasVideoConversionRole());
         }
     }
     @Nested
