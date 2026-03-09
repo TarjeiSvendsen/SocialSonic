@@ -24,6 +24,11 @@ public enum ErrorCodes {
         this.description = description;
     }
 
+    /**
+     * Creates an error response.
+     * @param code the code to construct the error node from.
+     * @return a {@link SubsonicResponse} with a child error node containing the error details.
+     */
     public static SubsonicResponse createErrorResponseFromCode(int code){
         SubsonicResponse response = new SubsonicResponse(true);
         response.overrideAttribute("status","failed");

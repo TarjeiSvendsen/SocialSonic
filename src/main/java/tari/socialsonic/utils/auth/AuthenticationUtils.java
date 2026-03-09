@@ -52,6 +52,12 @@ public class AuthenticationUtils {
         else return 10;
     }
 
+    /**
+     * Compares the password sent by the user, to the one stored in the database.
+     * @param password The password sent in with a request
+     * @param user the user object retrieved from the database.
+     * @return a boolean indicating if the passwords match or not.
+     */
     private boolean comparePassword(String password,User user){
         byte[] sentPassword = hashPassword(user.getSalt(),password);
         return Arrays.equals(sentPassword, user.getHashedPassword());
@@ -82,6 +88,10 @@ public class AuthenticationUtils {
         return !password.startsWith("enc:");
     }
 
+    /**
+     * Generates a random key, ?? bytes long
+     * @return a hexadecimal string.
+     */
     public static String generateKey(){
         Random random = new Random();
         return Long.toHexString(random.nextLong());
