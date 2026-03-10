@@ -13,7 +13,7 @@ import tari.socialsonic.database.user.User;
 import tari.socialsonic.database.user.roles.UserRoleService;
 import tari.socialsonic.utils.auth.AuthenticationUtils;
 import tari.socialsonic.utils.auth.UserUtils;
-import tari.socialsonic.utils.errors.ErrorCodes;
+import tari.socialsonic.utils.errors.ErrorCodeUtils;
 import tari.socialsonic.utils.response.ResponseUtils;
 import java.util.Map;
 import java.util.Objects;
@@ -49,10 +49,10 @@ public class UserController {
             boolean isUserAdmin = authUtils.isUserAdmin(params);
             if ( !isUserAdmin && Objects.equals(environment.getProperty("SCS_NON_ADMIN_USER_CREATION"),"false")
                     || !isUserAdmin && params.get("adminRole").equals("true")){
-                return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(50));
+                return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
             }
             if (!containsParams(params,new String[]{"username","password","email"}))
-                return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(10));
+                return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
             User newUser = new User();
             for (String key: params.keySet()){
                 switch (key){
@@ -80,7 +80,7 @@ public class UserController {
             userService.save(newUser);
             return responseUtils.generateResponse(params, new SubsonicResponse(true));
         }
-        else return responseUtils.generateResponse(params, ErrorCodes.createErrorResponseFromCode(authResult));
+        else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
 
     private boolean containsParams(Map<String,String> params,String[] toMatch){

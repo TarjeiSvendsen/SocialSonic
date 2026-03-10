@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import tari.socialsonic.SubsonicResponse;
-import tari.socialsonic.utils.errors.ErrorCodes;
+import tari.socialsonic.utils.errors.ErrorCodeUtils;
 
 import java.util.Map;
 
@@ -38,7 +38,7 @@ public class ResponseUtils {
                 headers.setContentType(MediaType.APPLICATION_XML);
                 return new ResponseEntity<>(xmlMapper.writeValueAsString(plannedResponse), headers, HttpStatus.OK);
             } else
-                return ResponseEntity.badRequest().body(mapper.writeValueAsString(ErrorCodes.createErrorResponseFromCode(0)));
+                return ResponseEntity.badRequest().body(mapper.writeValueAsString(ErrorCodeUtils.createErrorResponseFromCode(0)));
         }
         catch (Exception e){
             // TODO, proper error handling required.

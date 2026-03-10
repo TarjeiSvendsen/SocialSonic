@@ -9,7 +9,7 @@ import tari.socialsonic.database.apiKey.ApiKeyService;
 import tari.socialsonic.database.user.UserService;
 import tari.socialsonic.database.user.User;
 import tari.socialsonic.utils.auth.AuthenticationUtils;
-import tari.socialsonic.utils.errors.ErrorCodes;
+import tari.socialsonic.utils.errors.ErrorCodeUtils;
 import tari.socialsonic.utils.response.ResponseUtils;
 
 import java.util.Map;
@@ -45,7 +45,7 @@ public class SystemController {
         int authResult = authUtils.authenticate(body);
         if (authResult == -1)
             return responseUtils.generateResponse(body);
-        else return responseUtils.generateResponse(body, ErrorCodes.createErrorResponseFromCode(authResult));
+        else return responseUtils.generateResponse(body, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
 
     //
@@ -73,6 +73,6 @@ public class SystemController {
 
             return responseUtils.generateResponse(body, response);
         }
-        else return responseUtils.generateResponse(body, ErrorCodes.createErrorResponseFromCode(authResult));
+        else return responseUtils.generateResponse(body, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
 }
