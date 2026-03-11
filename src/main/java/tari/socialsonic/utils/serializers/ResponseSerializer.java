@@ -1,91 +1,72 @@
 package tari.socialsonic.utils.serializers;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import tari.socialsonic.SubsonicResponse;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.dataformat.xml.ser.ToXmlGenerator;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class ResponseSerializer extends StdSerializer<SubsonicResponse> {
+public class ResponseSerializer extends ValueSerializer<SubsonicResponse> {
 
     public ResponseSerializer(){
         this(null);
     }
 
-    protected ResponseSerializer(Class<SubsonicResponse> t) {
-        super(t);
-    }
-
     @Override
-    public void serialize(SubsonicResponse subsonicResponse, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(SubsonicResponse subsonicResponse, JsonGenerator jsonGenerator, SerializationContext ctxt) throws JacksonException {
         if (jsonGenerator instanceof ToXmlGenerator xmlGenerator) {
             xmlGenerator.writeStartObject();
-            writeObjectAttributes(xmlGenerator,subsonicResponse);
-            serializeChildren(xmlGenerator,subsonicResponse);
+            writeAttributes(subsonicResponse,xmlGenerator);
+            if (!subsonicResponse.childNodes.isEmpty()) writeChildNodes(subsonicResponse,jsonGenerator);
             xmlGenerator.writeEndObject();
         }
         else {
             jsonGenerator.writeStartObject();
-            writeObjectAttributes(jsonGenerator,subsonicResponse);
-            serializeChildren(jsonGenerator,subsonicResponse);
+
+            jsonGenerator.writeName("subsonic-response");
+            jsonGenerator.writeStartObject();
+
+            writeAttributes(subsonicResponse, jsonGenerator);
+            writeChildNodes(subsonicResponse, jsonGenerator);
+
+            jsonGenerator.writeEndObject();
             jsonGenerator.writeEndObject();
         }
     }
 
-    public void serializeChildren(JsonGenerator generator, SubsonicResponse subsonicResponse){
-        for (Map.Entry<String, List<SubsonicResponse>> childNodes : subsonicResponse.childNodes.entrySet()) {
-            for (SubsonicResponse node : childNodes.getValue()){
-                writeRecursiveChildren(generator,node,childNodes.getKey());
-            }
-        }
+    protected ResponseSerializer(Class<SubsonicResponse> t) {
+        super();
     }
 
-    public static void writeObjectAttributes(JsonGenerator generator, SubsonicResponse subsonicResponse) throws IOException {
+    private void writeAttributes(SubsonicResponse response,JsonGenerator generator){
         if (generator instanceof ToXmlGenerator xmlGenerator) {
-            for (Map.Entry<String, Object> attribute : subsonicResponse.attributes.entrySet()) {
+            for (Map.Entry<String,Object> entry: response.attributes.entrySet()){
+                xmlGenerator.writeName(entry.getKey());
                 xmlGenerator.setNextIsAttribute(true);
-                xmlGenerator.writeObjectField(attribute.getKey(),attribute.getValue());
+                xmlGenerator.writeString(entry.getValue().toString());
             }
         }
         else {
-            for (Map.Entry<String, Object> attribute : subsonicResponse.attributes.entrySet()) {
-                // This works, so DON'T use writeObjectField, as with SerializationFeature.WRAP_ROOT_VALUE it thinks the attributes are root values or something,
-                // IDK... I'm too tired of this shit
-
-                if (attribute.getValue() instanceof Boolean) {
-                    generator.writeBooleanField(attribute.getKey(), (Boolean) attribute.getValue());
-                }
-                else if(attribute.getValue() instanceof Number){
-                    generator.writeNumberField(attribute.getKey(), (Integer) attribute.getValue());
-                }
-                else generator.writeStringField(attribute.getKey(), (String) attribute.getValue());
-
+            for (Map.Entry<String,Object> entry: response.attributes.entrySet()){
+                generator.writeName(entry.getKey());
+                generator.writeString(entry.getValue().toString());
+            }
+        }
+    }
+    private void writeChildNodes(SubsonicResponse response, JsonGenerator generator){
+        for (Map.Entry<String,List<SubsonicResponse>> children: response.childNodes.entrySet()){
+            for (SubsonicResponse child : children.getValue()){
+                generator.writeName(children.getKey());
+                generator.writeStartObject();
+                writeAttributes(child,generator);
+                if (!child.childNodes.isEmpty()) writeChildNodes(child,generator);
+                generator.writeEndObject();
             }
         }
     }
 
-    private void writeRecursiveChildren(JsonGenerator generator, SubsonicResponse element,String nodeName)  {
-        try{
-            generator.writeFieldName(nodeName);
-            generator.writeStartObject();
-            writeObjectAttributes(generator, element);
-            if (!element.childNodes.isEmpty()) {
-                for (Map.Entry<String, List<SubsonicResponse>> childNodes : element.childNodes.entrySet()) {
-                    for (SubsonicResponse node : childNodes.getValue()){
-                        writeRecursiveChildren(generator,node,childNodes.getKey());
-                    }
-                }
-            }
-            generator.writeEndObject();
-        }
-        catch (IOException ioException){
-            // TODO Proper error handling
-            System.out.println("Encountered error: " + ioException);
-        }
-
-    }
 }

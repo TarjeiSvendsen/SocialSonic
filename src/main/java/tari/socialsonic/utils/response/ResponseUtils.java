@@ -1,8 +1,5 @@
 package tari.socialsonic.utils.response;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,17 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import tari.socialsonic.SubsonicResponse;
 import tari.socialsonic.utils.errors.ErrorCodeUtils;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.xml.XmlMapper;
 
 import java.util.Map;
 
 @Component
 public class ResponseUtils {
 
-    ObjectMapper mapper = new ObjectMapper();
-    XmlMapper xmlMapper = new XmlMapper();
+    JsonMapper mapper = JsonMapper.builder().build();
+    XmlMapper xmlMapper = XmlMapper.builder().build();
 
     public ResponseUtils(){
-        mapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
     }
 
     public ResponseEntity<String> generateResponse(Map<String,String> params){

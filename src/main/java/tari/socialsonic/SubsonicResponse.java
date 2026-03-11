@@ -2,16 +2,14 @@ package tari.socialsonic;
 
 
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import tari.socialsonic.utils.serializers.ResponseSerializer;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.HashMap;
 import java.util.Map;
 @JsonRootName(value = "subsonic-response")
-@JacksonXmlRootElement(localName = "subsonic-response")
 @JsonSerialize(using = ResponseSerializer.class)
 public class SubsonicResponse {
     public boolean isRoot;
