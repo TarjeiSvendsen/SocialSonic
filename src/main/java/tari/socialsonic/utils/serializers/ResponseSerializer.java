@@ -12,10 +12,6 @@ import java.util.Map;
 
 public class ResponseSerializer extends ValueSerializer<SubsonicResponse> {
 
-    public ResponseSerializer(){
-        this(null);
-    }
-
     @Override
     public void serialize(SubsonicResponse subsonicResponse, JsonGenerator jsonGenerator, SerializationContext ctxt) throws JacksonException {
         if (jsonGenerator instanceof ToXmlGenerator xmlGenerator) {
@@ -38,7 +34,7 @@ public class ResponseSerializer extends ValueSerializer<SubsonicResponse> {
         }
     }
 
-    protected ResponseSerializer(Class<SubsonicResponse> t) {
+    protected ResponseSerializer() {
         super();
     }
 
