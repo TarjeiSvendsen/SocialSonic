@@ -78,14 +78,32 @@ public class ResponseSerializer extends ValueSerializer<SubsonicResponse> {
     private void writeChildNodes(SubsonicResponse response, JsonGenerator generator){
         // No need to differentiate between the generators in this, as this uses methods available in both.
         for (Map.Entry<String,List<SubsonicResponse>> children: response.childNodes.entrySet()){
-            for (SubsonicResponse child : children.getValue()){
+            List<SubsonicResponse> childNodes = children.getValue();
+            if (childNodes.size() == 1){
                 generator.writeName(children.getKey());
-                generator.writeStartObject();
-                writeAttributes(child,generator);
-                if (!child.childNodes.isEmpty()) writeChildNodes(child,generator);
-                generator.writeEndObject();
+                writeChildObject(childNodes.getFirst(),generator);
+            }
+            else {
+                generator.writeArrayPropertyStart(children.getKey());
+                for (SubsonicResponse child : childNodes){
+                    writeChildObject(child,generator);
+                }
+                generator.writeEndArray();
             }
         }
+    }
+
+    /**
+     * Method to write a child object, to be used in a context where the object name already has been written, or in an
+     * array context, such as in {@code writeChildNodes()} above.
+     * @param response the response to be passed in from either a
+     * @param generator the generator passed along, either of type {@link JsonGenerator}, or {@link ToXmlGenerator}
+     */
+    private void writeChildObject(SubsonicResponse response,JsonGenerator generator){
+        generator.writeStartObject();
+        writeAttributes(response,generator);
+        if (!response.childNodes.isEmpty()) writeChildNodes(response,generator);
+        generator.writeEndObject();
     }
 
 }
