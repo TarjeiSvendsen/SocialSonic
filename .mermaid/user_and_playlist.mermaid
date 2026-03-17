@@ -1,0 +1,57 @@
+erDiagram
+    apiKey }o -- || scs_user: ""
+    scs_external }o -- || scs_user: ""
+    scs_user_roles || -- || scs_user: ""
+    apiKey{
+        VARCHAR(64) key PK
+        int owner FK
+        timestamp dateIssued
+        timestamp validTo
+    }
+    scs_user{
+        int user_id "PK,AI"
+        VARCHAR(50) user_name
+        VARCHAR(50) user_email
+        VARCHAR(20) password_salt
+        BYTES(16) password
+        BOOLEAN ldapAuthenticated
+    }
+    scs_user_roles{
+        int role_id "PK,AI"
+        int user_id FK
+        boolean admin_role
+        boolean settings_role
+    }
+    scs_external{
+        int user_id "FK"
+        VARCHAR(4) platform
+        VARCHAR(50) username
+        VARCHAR(50) password
+
+    }
+
+    %% Playlist section
+    playlist }o -- || playlist_songs: ""
+    playlist }o -- || playlist_collaborators: ""
+    playlist }o -- || scs_user: ""
+    playlist_songs }o -- || scs_user: ""
+    playlist{
+        int id "PK,AI"
+        int owner "FK, NOTNULL"
+        VARCHAR(50) title
+        VARCHAR(255) description
+        VARCHAR(100) image_path
+        int visibility
+    }
+    playlist_songs{
+        int playlist_id "PK, AI"
+        int song_id "FK"
+        int added_by "FK"
+        DATE date_added
+    }
+    playlist_collaborators{
+        int playlist_id "FK"
+        int user_id "FK"
+
+    }
+

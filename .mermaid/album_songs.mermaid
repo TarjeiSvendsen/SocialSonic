@@ -1,0 +1,109 @@
+erDiagram
+    album || -- |{ album_discs: ""
+    album || -- |{ album_artists: ""
+    album_artists }| -- || artist: ""
+
+    album }| -- |{ album_genres: ""
+    album_genres || -- || genre: ""
+
+    song }| -- || song_lyrics: ""
+    song_lyrics || -- o{ lyric: ""
+    song }| -- || album: ""
+    song }o -- || skip_portion: ""
+    song }| -- || song_artists: ""
+    song || -- o{ song_ratings: ""
+    song }| -- || song_scrobbles: ""
+
+    album{
+        int mb_id "PK,UNIQUE"
+        VARCHAR(255) title
+        int album_type
+        DATE release_date
+    }
+    album_artists{
+        int album_id "FK"
+        int artist_id "FK"
+        VARCHAR(20) role
+    }
+    album_discs{
+        int album_id "FK"
+        int disc_number ""
+    }
+    song{
+        int id PK
+        varchar(100) title
+    }
+    song_artists{
+        int song_id
+        int artist_id
+        varhcar(50) role
+    }
+    song_ratings{
+        int rate_id PK
+        int song_id FK
+        int user_id FK
+        int rate_value
+        timestamp time_rated
+    }
+    song_scrobbles{
+        int scrobble_id PK
+        int user_id FK
+        varchar(50) scrobble_target
+        timestamp scrobble_date
+    }
+    skip_portion{
+        int skip_id PK
+        int song_id FK
+        int user_id FK
+        int from_time
+        int to_time
+    }
+
+    artist{
+        int artist_id
+        int mb_artist_id "PK,UNIQUE"
+        text description
+        varchar(255) image_path
+    }
+
+    genre{
+        int genre_id "PK,UNIQUE"
+        VARCHAR(30) genre_title
+        int parent_genre
+    }
+    album_genres{
+        int album_id "FK"
+        int genre_id "FK"
+    }
+
+
+    %% Cover art
+    cover_art || -- || album_cover_art: ""
+    album || -- || album_cover_art: ""
+    cover_art{
+        int cover_art_id "PK,AI"
+        VARCHAR(20) title
+        TEXT description
+        VARCHAR(10) type
+        VARCHAR(255) path
+    }
+    album_cover_art{
+        int cover_art_id "FK"
+        int album_id "FK"
+    }
+
+    %% Lyrics
+
+    lyric{
+        int lyric_id "PK,AI"
+        %% conforming to ISO-3166
+        VARCHAR(2) language
+        VARCHAR(10) type
+        TEXT lyrics
+        VARCHAR(50) source
+        DATE time_created
+    }
+    song_lyrics{
+        int song_id FK
+        int song_id FK
+    }
