@@ -30,12 +30,12 @@ public class AuthenticationUtils {
     /**
      * Primary method for authenticating
      * @param params the parameters from the endpoint
-     * @return an error code upon unsuccessfully authenticating, or -1 indicating success.
+     * @return an error code upon unsuccessfully authenticating, or -1 indicating success using u + p or -2 for api key.
      */
     public int authenticate(Map<String,String> params){
         if (params.containsKey("apiKey")){
             if (params.containsKey("u") || params.containsKey("t") || params.containsKey("s")) return 43;
-            return validateApiKey(params.get("apiKey")) ? -1 : 44;
+            return validateApiKey(params.get("apiKey")) ? -2 : 44;
         }
         else if(params.containsKey("u")){
             User tmpUser = userService.getUserByUsername(params.get("u"));

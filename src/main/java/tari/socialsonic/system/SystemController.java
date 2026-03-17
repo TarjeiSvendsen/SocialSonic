@@ -43,7 +43,7 @@ public class SystemController {
 
     private ResponseEntity<String> ping(Map<String,String> body){
         int authResult = authUtils.authenticate(body);
-        if (authResult == -1)
+        if (authResult <= -1)
             return responseUtils.generateResponse(body);
         else return responseUtils.generateResponse(body, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
@@ -62,7 +62,7 @@ public class SystemController {
     private ResponseEntity<String> tokenInfo(Map<String,String> body){
         int authResult = authUtils.authenticate(body);
         
-        if (authResult == -1) {
+        if (authResult <= -1) {
             SubsonicResponse response = new SubsonicResponse(true);
             SubsonicResponse tokenInfo = new SubsonicResponse(false);
 

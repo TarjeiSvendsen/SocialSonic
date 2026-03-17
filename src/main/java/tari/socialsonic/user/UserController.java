@@ -45,7 +45,7 @@ public class UserController {
 
     private ResponseEntity<String> createUser(Map<String,String> params){
         int authResult = authUtils.authenticate(params);
-        if (authResult == -1) {
+        if (authResult <= -1) {
             boolean isUserAdmin = authUtils.isUserAdmin(params);
             if ( !isUserAdmin && Objects.equals(environment.getProperty("SCS_NON_ADMIN_USER_CREATION"),"false")
                     || !isUserAdmin && params.get("adminRole").equals("true")){
