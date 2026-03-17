@@ -57,7 +57,7 @@ public class UserController {
                     || !isUserAdmin && params.get("adminRole").equals("true")){
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
             }
-            if (!containsParams(params,new String[]{"username","password","email"}))
+            if (!responseUtils.containsParams(params,new String[]{"username","password","email"}))
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
             User newUser = new User();
             for (String key: params.keySet()){
@@ -89,10 +89,40 @@ public class UserController {
         else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
 
-    private boolean containsParams(Map<String,String> params,String[] toMatch){
-        for (String s: toMatch){
-            if (!params.containsKey(s)) return false;
-        }
-        return true;
+
+    @GetMapping(value = {"/rest/updatePassword", "/api/v1/updatePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> getUpdatePassword(@RequestParam Map<String, String> params) {
+        return updatePassword(params);
     }
+    @PostMapping(value = {"/rest/updatePassword", "/api/v1/updatePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> postUpdatePassword(@RequestParam Map<String, String> params) {
+        return updatePassword(params);
+    }
+
+    private ResponseEntity<String> updatePassword(Map<String,String> params){
+        int authResult = authUtils.authenticate(params);
+        if (!responseUtils.containsParams(params,new String[]{"username","password"}))
+            return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
+
+        User authenticatedUser;
+        if (authResult == -2)
+            authenticatedUser = apiKeyService.getOwner(params.get("apiKey"));
+        else if (authResult == -1)
+            authenticatedUser = userService.getUserByUsername(params.get("u"));
+        else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
+
+        User updatedUser = userService.getUserByUsername(params.get("username"));
+        if (updatedUser == null) return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(70));
+
+        if (!authenticatedUser.getUserName().equals(params.get("username")) || !authUtils.isUserAdmin(params)){
+            return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
+        }
+        else {
+            authenticatedUser.setHashedPassword(authUtils.hashPassword(authenticatedUser.getSalt(),params.get("password")));
+            userService.save(authenticatedUser);
+            return responseUtils.generateResponse(params);
+        }
+    }
+
+
 }

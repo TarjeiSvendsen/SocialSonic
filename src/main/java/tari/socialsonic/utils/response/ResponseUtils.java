@@ -44,4 +44,11 @@ public class ResponseUtils {
             return ResponseEntity.badRequest().body("Bad request");
         }
     }
+
+    public boolean containsParams(Map<String,String> params,String[] toMatch){
+        for (String s: toMatch){
+            if (!params.containsKey(s)) return false;
+        }
+        return true;
+    }
 }
