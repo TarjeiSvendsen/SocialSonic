@@ -84,6 +84,7 @@ public class UserController {
             newUser.setRoles(UserUtils.setRoles(params,isUserAdmin));
             userRoleService.save(newUser.getRoles());
             userService.save(newUser);
+            authUtils.regenerateUserMap();
             return responseUtils.generateResponse(params, new SubsonicResponse(true));
         }
         else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
@@ -106,12 +107,12 @@ public class UserController {
 
         User authenticatedUser;
         if (authResult == -2)
-            authenticatedUser = apiKeyService.getOwner(params.get("apiKey"));
+            authenticatedUser = authUtils.getUserFromParams(params);
         else if (authResult == -1)
-            authenticatedUser = userService.getUserByUsername(params.get("u"));
+            authenticatedUser = authUtils.getUserFromParams(params);
         else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
 
-        User updatedUser = userService.getUserByUsername(params.get("username"));
+        User updatedUser = authUtils.getUserFromParams(params);
         if (updatedUser == null) return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(70));
 
         if (!authenticatedUser.getUserName().equals(params.get("username")) || !authUtils.isUserAdmin(params)){
@@ -120,6 +121,7 @@ public class UserController {
         else {
             authenticatedUser.setHashedPassword(authUtils.hashPassword(authenticatedUser.getSalt(),params.get("password")));
             userService.save(authenticatedUser);
+            authUtils.regenerateUserMap();
             return responseUtils.generateResponse(params);
         }
     }

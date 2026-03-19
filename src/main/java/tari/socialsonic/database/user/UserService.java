@@ -2,6 +2,8 @@ package tari.socialsonic.database.user;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -16,6 +18,9 @@ public class UserService {
     }
     public User getUserById(int id){
         return userRepository.getUserById(id);
+    }
+    public List<User> getAll(){
+        return userRepository.findAll();
     }
 
     public void save(User user){

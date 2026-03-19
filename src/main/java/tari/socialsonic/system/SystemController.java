@@ -55,24 +55,24 @@ public class SystemController {
     }
 
     @PostMapping(value={"/rest/tokenInfo","/api/v1/tokenInfo"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ResponseEntity<String> postTokenInfo(@RequestParam Map<String,String> body){
-        return tokenInfo(body);
+    public ResponseEntity<String> postTokenInfo(@RequestParam Map<String,String> params){
+        return tokenInfo(params);
     }
 
-    private ResponseEntity<String> tokenInfo(Map<String,String> body){
-        int authResult = authUtils.authenticate(body);
+    private ResponseEntity<String> tokenInfo(Map<String,String> params){
+        int authResult = authUtils.authenticate(params);
         
         if (authResult <= -1) {
             SubsonicResponse response = new SubsonicResponse(true);
             SubsonicResponse tokenInfo = new SubsonicResponse(false);
 
-            User owner = apiKeyService.getOwner(body.get("apiKey"));
+            User owner = authUtils.getUserFromParams(params);
             tokenInfo.addAttribute(new SubsonicResponse.Attribute("username", owner.getUserName()));
 
             response.addChildNode("tokenInfo", tokenInfo);
 
-            return responseUtils.generateResponse(body, response);
+            return responseUtils.generateResponse(params, response);
         }
-        else return responseUtils.generateResponse(body, ErrorCodeUtils.createErrorResponseFromCode(authResult));
+        else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
 }

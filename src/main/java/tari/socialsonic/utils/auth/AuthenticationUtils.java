@@ -23,11 +23,13 @@ public class AuthenticationUtils {
     private final Environment environment;
 
     private HashMap<String,ApiKey> apiKeys = new HashMap<>();
+    private HashMap<String,User> users = new HashMap<>();
 
     public AuthenticationUtils(final ApiKeyService apiKeyService, final UserService userService, Environment environment){
         this.apiKeyService = apiKeyService;
         this.userService = userService;
         this.environment = environment;
+        regenerateUserMap();
         regenerateApiKeyMap();
     }
     /**
@@ -41,7 +43,7 @@ public class AuthenticationUtils {
             return validateApiKey(params.get("apiKey")) ? -2 : 44;
         }
         else if(params.containsKey("u")){
-            User tmpUser = userService.getUserByUsername(params.get("u"));
+            User tmpUser = users.get(params.get("u"));
             if (tmpUser == null) return 40;
             if (params.containsKey("p")){
                 return comparePassword(params.get("p"), tmpUser) ? -1 : 40;
@@ -115,26 +117,37 @@ public class AuthenticationUtils {
     }
 
      /**
-     * Gets the {@link User} object from the DB using the params from a request.
+     * Gets the {@link User} object from the HashMaps using the params from a request.
      * @param params The parameters used in a request, contains either username or apiKey field,
      * as this method should be used only after weeding out bad requests
      * containing none of the aforementioned values.
      * @return The {@link User} object.
      */
-    private User getUserFromParams(Map<String,String> params){
+    public User getUserFromParams(Map<String,String> params){
         User tmpUser;
         if (params.containsKey("u")){
-            tmpUser = userService.getUserByUsername(params.get("u"));
+            tmpUser = users.get(params.get("u"));
         }
         else{
-            tmpUser = apiKeyService.getOwner(params.get("apiKey"));
+            tmpUser = apiKeys.get(params.get("apiKey")).getOwner();
         }
         return tmpUser;
     }
 
     /**
-     * Refreshes the HashMap of API keys to ensure it stays up to date,
-     * should be refreshed by methods updating the db.
+     * Regenerates the HashMap of existing users to ensure it stays up to date.
+     * Should be called when updating the db in methods such as updateUser, createUser, or similar.
+     */
+    public void regenerateUserMap(){
+        users.clear();
+        for (User user : userService.getAll()){
+            users.put(user.getUserName(),user);
+        }
+    }
+
+    /**
+     * Regenerates the HashMap of API keys to ensure it stays up to date.
+     * Should be called when updating the db in methods and endpoints updating or creating/deleting API keys.
      */
     public void regenerateApiKeyMap(){
         apiKeys.clear();
