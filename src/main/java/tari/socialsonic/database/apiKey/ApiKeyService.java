@@ -23,6 +23,10 @@ public class ApiKeyService{
         return apiKeyRepository.getApiKeysByDateIssued(date);
     }
 
+    public List<ApiKey> getAll(){
+        return apiKeyRepository.findAll();
+    }
+
     public ApiKey getApiKeyByKey(String key){
         return apiKeyRepository.getApiKeyByKey(key);
     }

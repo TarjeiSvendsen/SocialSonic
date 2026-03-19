@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -21,11 +22,13 @@ public class AuthenticationUtils {
     private final UserService userService;
     private final Environment environment;
 
+    private HashMap<String,ApiKey> apiKeys = new HashMap<>();
 
     public AuthenticationUtils(final ApiKeyService apiKeyService, final UserService userService, Environment environment){
         this.apiKeyService = apiKeyService;
         this.userService = userService;
         this.environment = environment;
+        regenerateApiKeyMap();
     }
     /**
      * Primary method for authenticating
@@ -129,9 +132,26 @@ public class AuthenticationUtils {
         return tmpUser;
     }
 
+    /**
+     * Refreshes the HashMap of API keys to ensure it stays up to date,
+     * should be refreshed by methods updating the db.
+     */
+    public void regenerateApiKeyMap(){
+        apiKeys.clear();
+        for (ApiKey ak : apiKeyService.getAll()){
+            apiKeys.put(ak.getKey(),ak);
+        }
+    }
+
+    /**
+     * Validates an API key by first checking the HashMap {@code apiKeys} which is expected to be up to date.
+     * Endpoints updating the API keys in the DB
+     * should call on {@code regenerateApiKeyMap} to make sure it stays up to date...
+     * @param apiKey the {@link ApiKey}.key to validate.
+     * @return a boolean indicating if the apiKey is valid or not.
+     */
     public boolean validateApiKey(String apiKey){
-        ApiKey tmpKey = apiKeyService.getApiKeyByKey(apiKey);
-        if (tmpKey == null) return false;
-        else return tmpKey.valid();
+        if (!apiKeys.containsKey(apiKey)) return false;
+        return apiKeys.get(apiKey).valid();
     }
 }
