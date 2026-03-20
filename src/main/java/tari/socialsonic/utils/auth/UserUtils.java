@@ -5,6 +5,7 @@ import tari.socialsonic.database.user.roles.UserRoles;
 
 import java.security.SecureRandom;
 import java.util.Map;
+import java.util.Objects;
 
 public class UserUtils {
 
@@ -64,6 +65,30 @@ public class UserUtils {
         return tmpUserRoles;
     }
 
+    public static User handleUserParams(Map<String,String> params,User user){
+        for (String key: params.keySet()){
+            switch (key){
+                case "username":
+                    user.setUserName(params.get(key));
+                    break;
+                case "password":
+                    user.setSalt(UserUtils.generateSalt());
+                    user.setHashedPassword(PasswordUtils.hashPassword(user.getSalt(), params.get(key)));
+                    break;
+                case "email":
+                    user.setEmail(params.get(key));
+                    break;
+                case "ldapAuthenticated":
+                    // TODO, should be handled differently, as this can currently just be manually specified.
+                    if (Objects.equals(params.get(key), "true"))
+                        user.setLdapAuthenticated(true);
+                    break;
+                default:
+                    break;
+            }
+        }
+        return user;
+    }
     /**
      * Checks if user has the administrator role.
      * @param user The {@link User} to check.

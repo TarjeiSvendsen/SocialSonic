@@ -13,6 +13,7 @@ import tari.socialsonic.database.user.UserService;
 import tari.socialsonic.database.user.User;
 import tari.socialsonic.database.user.roles.UserRoleService;
 import tari.socialsonic.utils.auth.AuthenticationUtils;
+import tari.socialsonic.utils.auth.PasswordUtils;
 import tari.socialsonic.utils.auth.UserUtils;
 import tari.socialsonic.utils.errors.ErrorCodeUtils;
 import tari.socialsonic.utils.response.ResponseUtils;
@@ -59,27 +60,7 @@ public class UserController {
             if (!responseUtils.containsParams(params,new String[]{"username","password","email"}))
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
             User newUser = new User();
-            for (String key: params.keySet()){
-                switch (key){
-                    case "username":
-                        newUser.setUserName(params.get(key));
-                        break;
-                    case "password":
-                        newUser.setSalt(UserUtils.generateSalt());
-                        newUser.setHashedPassword(authUtils.hashPassword(newUser.getSalt(), params.get(key)));
-                        break;
-                    case "email":
-                        newUser.setEmail(params.get(key));
-                        break;
-                    case "ldapAuthenticated":
-                        // TODO, should be handled differently, as this can currently just be manually specified.
-                        if (Objects.equals(params.get(key), "true"))
-                            newUser.setLdapAuthenticated(true);
-                        break;
-                    default:
-                        break;
-                }
-            }
+            UserUtils.handleUserParams(params,newUser);
             newUser.setRoles(UserUtils.setRoles(params,isUserAdmin));
             userRoleService.save(newUser.getRoles());
             userService.save(newUser);
@@ -108,11 +89,40 @@ public class UserController {
             }
             if (!responseUtils.containsParams(params, new String[]{"username"}))
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
-
             User userToRemove = authUtils.getUserByUsername(params.get("username"));
             userService.removeUser(userToRemove);
             authUtils.regenerateUserMap();
             return responseUtils.generateResponse(params);
+        }
+        else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
+    }
+
+    @GetMapping(value = {"/rest/updateUser", "/api/v1/updateUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> getUpdateUser(@RequestParam Map<String, String> params) {
+        return updateUser(params);
+    }
+
+    @PostMapping(value = {"/rest/updateUser", "/api/v1/updateUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> postUpdateUser(@RequestParam Map<String, String> params) {
+        return updateUser(params);
+    }
+
+    private ResponseEntity<String> updateUser(Map<String,String> params){
+        int authResult = authUtils.authenticate(params);
+        if (authResult <= -1) {
+            User authenticatedUser = authUtils.getUserFromParams(params);
+            if (!authenticatedUser.getUserName().equals(params.get("username")) || !authUtils.isUserAdmin(params)){
+                return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
+            }
+            if (!responseUtils.containsParams(params,new String[]{"username"}))
+                return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
+            User user = authUtils.getUserByUsername(params.get("username"));
+            UserUtils.handleUserParams(params,user);
+            user.setRoles(UserUtils.setRoles(params,authUtils.isUserAdmin(params)));
+            userRoleService.save(user.getRoles());
+            userService.save(user);
+            authUtils.regenerateUserMap();
+            return responseUtils.generateResponse(params, new SubsonicResponse(true));
         }
         else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
@@ -141,7 +151,7 @@ public class UserController {
             return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
         }
         else {
-            authenticatedUser.setHashedPassword(authUtils.hashPassword(authenticatedUser.getSalt(),params.get("password")));
+            authenticatedUser.setHashedPassword(PasswordUtils.hashPassword(authenticatedUser.getSalt(),params.get("password")));
             userService.save(authenticatedUser);
             authUtils.regenerateUserMap();
             return responseUtils.generateResponse(params);
