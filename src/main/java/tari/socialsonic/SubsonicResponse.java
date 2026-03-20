@@ -35,6 +35,13 @@ public class SubsonicResponse {
             this.attributes.put(a.key,a.value);
         }
     }
+    public SubsonicResponse(String childNodeName,SubsonicResponse childNode){
+        this.isRoot = true;
+        addRootAttributes();
+        this.attributes = new HashMap<>();
+        this.childNodes = new LinkedMultiValueMap<>();
+        this.childNodes.add(childNodeName,childNode);
+    }
 
     public void addAttribute(Attribute attribute){
         attributes.put(attribute.key,attribute.value);
