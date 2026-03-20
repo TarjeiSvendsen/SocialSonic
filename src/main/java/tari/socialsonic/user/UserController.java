@@ -83,10 +83,9 @@ public class UserController {
     private ResponseEntity<String> deleteUser(Map<String,String> params){
         int authResult = authUtils.authenticate(params);
         if (authResult <= -1) {
-            User authenticatedUser = authUtils.getUserFromParams(params);
-            if (!authenticatedUser.getUserName().equals(params.get("username")) || !authUtils.isUserAdmin(params)){
+            if (!authUtils.isUserAuthorized(params))
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
-            }
+
             if (!responseUtils.containsParams(params, new String[]{"username"}))
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
             User userToRemove = authUtils.getUserByUsername(params.get("username"));
@@ -110,10 +109,8 @@ public class UserController {
     private ResponseEntity<String> updateUser(Map<String,String> params){
         int authResult = authUtils.authenticate(params);
         if (authResult <= -1) {
-            User authenticatedUser = authUtils.getUserFromParams(params);
-            if (!authenticatedUser.getUserName().equals(params.get("username")) || !authUtils.isUserAdmin(params)){
+            if (!authUtils.isUserAuthorized(params))
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
-            }
             if (!responseUtils.containsParams(params,new String[]{"username"}))
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
             User user = authUtils.getUserByUsername(params.get("username"));
@@ -126,6 +123,35 @@ public class UserController {
         }
         else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
+
+    @GetMapping(value = {"/rest/getUser", "/api/v1/getUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> getGetUser(@RequestParam Map<String, String> params) {
+        // Sidenote, this method name sucks.
+        return getUserInfo(params);
+    }
+
+    @PostMapping(value = {"/rest/getUser", "/api/v1/getUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> postGetUser(@RequestParam Map<String, String> params) {
+        return getUserInfo(params);
+    }
+
+    private ResponseEntity<String> getUserInfo(Map<String,String> params){
+        int authResult = authUtils.authenticate(params);
+        if (authResult <= -1) {
+            User authenticatedUser = authUtils.getUserFromParams(params);
+            if (!authenticatedUser.getUserName().equals(params.get("username")) || !authUtils.isUserAdmin(params)){
+                return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
+            }
+            if (!responseUtils.containsParams(params,new String[]{"username"}))
+                return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
+            User user = authUtils.getUserByUsername(params.get("username"));
+            return responseUtils.generateResponse(params,
+                    new SubsonicResponse("user",
+                            UserUtils.convertUserToSubsonicResponse(user)));
+        }
+        else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
+    }
+    
 
     @GetMapping(value = {"/rest/updatePassword", "/api/v1/updatePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getUpdatePassword(@RequestParam Map<String, String> params) {
@@ -142,17 +168,15 @@ public class UserController {
             return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
         if (authResult > -1) return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
 
-        User authenticatedUser = authUtils.getUserFromParams(params);
-        // updatedUser is the user to update the password for, and authenticatedUser is the one that's used for authentication.
+        if (!authUtils.isUserAuthorized(params))
+            return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
+        // updatedUser is the user to update the password for.
         User updatedUser = authUtils.getUserByUsername(params.get("username"));
         if (updatedUser == null) return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(70));
 
-        if (!authenticatedUser.getUserName().equals(params.get("username")) || !authUtils.isUserAdmin(params)){
-            return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
-        }
         else {
-            authenticatedUser.setHashedPassword(PasswordUtils.hashPassword(authenticatedUser.getSalt(),params.get("password")));
-            userService.save(authenticatedUser);
+            updatedUser.setHashedPassword(PasswordUtils.hashPassword(updatedUser.getSalt(),params.get("password")));
+            userService.save(updatedUser);
             authUtils.regenerateUserMap();
             return responseUtils.generateResponse(params);
         }

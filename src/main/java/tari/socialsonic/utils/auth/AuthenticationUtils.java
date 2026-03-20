@@ -76,6 +76,14 @@ public class AuthenticationUtils {
         return UserUtils.isUserAdmin(getUserFromParams(params));
     }
 
+    public boolean isUserAuthorized(Map<String,String> params){
+        User authenticatedUser = getUserFromParams(params);
+        if (!authenticatedUser.getUserName().equals(params.get("username")) || !isUserAdmin(params)){
+            return false;
+        }
+        else return true;
+    }
+
      /**
      * Gets the {@link User} object from the HashMaps using the params from a request.
      * @param params The parameters used in a request, contains either username or apiKey field,
