@@ -134,6 +134,9 @@ public class AuthenticationUtils {
         return tmpUser;
     }
 
+    public User getUserByUsername(String username){
+        return users.getOrDefault(username, null);
+    }
     /**
      * Regenerates the HashMap of existing users to ensure it stays up to date.
      * Should be called when updating the db in methods such as updateUser, createUser, or similar.

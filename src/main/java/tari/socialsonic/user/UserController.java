@@ -27,7 +27,6 @@ public class UserController {
     private final ApiKeyService apiKeyService;
     private final UserRoleService userRoleService;
     private final UserService userService;
-    // Not currently used, but can be useful for later...
     private final Environment environment;
 
     public UserController(ResponseUtils responseUtils, AuthenticationUtils authUtils, ApiKeyService apiKeyService, UserRoleService userRoleService, UserService userService, Environment environment) {
@@ -104,15 +103,11 @@ public class UserController {
         int authResult = authUtils.authenticate(params);
         if (!responseUtils.containsParams(params,new String[]{"username","password"}))
             return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
+        if (authResult > -1) return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
 
-        User authenticatedUser;
-        if (authResult == -2)
-            authenticatedUser = authUtils.getUserFromParams(params);
-        else if (authResult == -1)
-            authenticatedUser = authUtils.getUserFromParams(params);
-        else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
-
-        User updatedUser = authUtils.getUserFromParams(params);
+        User authenticatedUser = authUtils.getUserFromParams(params);
+        // updatedUser is the user to update the password for, and authenticatedUser is the one that's used for authentication.
+        User updatedUser = authUtils.getUserByUsername(params.get("username"));
         if (updatedUser == null) return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(70));
 
         if (!authenticatedUser.getUserName().equals(params.get("username")) || !authUtils.isUserAdmin(params)){
