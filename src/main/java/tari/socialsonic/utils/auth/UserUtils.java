@@ -108,7 +108,8 @@ public class UserUtils {
         SubsonicResponse childNode = new SubsonicResponse();
         childNode.addAttribute(new SubsonicResponse.Attribute("username",user.getUserName()));
         childNode.addAttribute(new SubsonicResponse.Attribute("email",user.getEmail()));
-        childNode.addAttribute(new SubsonicResponse.Attribute("folder",new int[]{1,2}));
+        // TODO, remember changing this when implementing folder access.
+        // childNode.addAttribute(new SubsonicResponse.Attribute("folder",new int[]{1,2}));
         for (SubsonicResponse.Attribute at: convertUserRolesToList(user)){
             childNode.addAttribute(at);
         }
