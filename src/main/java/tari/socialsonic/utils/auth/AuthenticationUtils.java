@@ -8,6 +8,7 @@ import tari.socialsonic.database.user.User;
 import tari.socialsonic.database.user.UserService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -102,9 +103,23 @@ public class AuthenticationUtils {
         return tmpUser;
     }
 
+    /**
+     * Gets a {@link User} from users.
+     * @param username the username of the user to get
+     * @return the {@link User} from users.
+     */
     public User getUserByUsername(String username){
         return users.getOrDefault(username, null);
     }
+
+    /**
+     * Gets all the users from users
+     * @return a {@link List} of users.
+     */
+    public List<User> getAllUsers(){
+        return users.values().stream().toList();
+    }
+
     /**
      * Regenerates the HashMap of existing users to ensure it stays up to date.
      * Should be called when updating the db in methods such as updateUser, createUser, or similar.

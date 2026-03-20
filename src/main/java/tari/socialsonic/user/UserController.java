@@ -151,7 +151,37 @@ public class UserController {
         }
         else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
-    
+
+
+
+    @GetMapping(value = {"/rest/getUsers", "/api/v1/getUsers"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> getGetUsers(@RequestParam Map<String, String> params) {
+        // Sidenote, this method name sucks.
+        return getAllUsers(params);
+    }
+
+    @PostMapping(value = {"/rest/getUsers", "/api/v1/getUsers"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> postGetUsers(@RequestParam Map<String, String> params) {
+        return getAllUsers(params);
+    }
+
+    private ResponseEntity<String> getAllUsers(Map<String,String> params){
+        int authResult = authUtils.authenticate(params);
+        if (authResult <= -1) {
+            if (!authUtils.isUserAdmin(params))
+                return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
+
+            SubsonicResponse response = new SubsonicResponse(true);
+            SubsonicResponse responseUsers = new SubsonicResponse();
+            for (User user : authUtils.getAllUsers()){
+                responseUsers.addChildNode("user",UserUtils.convertUserToSubsonicResponse(user));
+            }
+            response.addChildNode("users",responseUsers);
+            return responseUtils.generateResponse(params, response);
+        }
+        else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
+    }
+
 
     @GetMapping(value = {"/rest/updatePassword", "/api/v1/updatePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getUpdatePassword(@RequestParam Map<String, String> params) {

@@ -7,8 +7,10 @@ import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.ValueSerializer;
 import tools.jackson.dataformat.xml.ser.ToXmlGenerator;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ResponseSerializer extends ValueSerializer<SubsonicResponse> {
 
@@ -25,7 +27,7 @@ public class ResponseSerializer extends ValueSerializer<SubsonicResponse> {
         if (jsonGenerator instanceof ToXmlGenerator xmlGenerator) {
             xmlGenerator.writeStartObject();
             writeAttributes(subsonicResponse,xmlGenerator);
-            if (!subsonicResponse.childNodes.isEmpty()) writeChildNodes(subsonicResponse,jsonGenerator);
+            if (!subsonicResponse.childNodes.isEmpty()) writeChildNodes(subsonicResponse,jsonGenerator,"root");
             xmlGenerator.writeEndObject();
         }
         else {
@@ -35,7 +37,7 @@ public class ResponseSerializer extends ValueSerializer<SubsonicResponse> {
             jsonGenerator.writeStartObject();
 
             writeAttributes(subsonicResponse, jsonGenerator);
-            if (!subsonicResponse.childNodes.isEmpty()) writeChildNodes(subsonicResponse, jsonGenerator);
+            if (!subsonicResponse.childNodes.isEmpty()) writeChildNodes(subsonicResponse, jsonGenerator,"root");
 
             jsonGenerator.writeEndObject();
             jsonGenerator.writeEndObject();
@@ -107,20 +109,24 @@ public class ResponseSerializer extends ValueSerializer<SubsonicResponse> {
      * @param response the {@link SubsonicResponse} object to read child nodes from
      * @param generator the generator, either of type {@link JsonGenerator} or {@link ToXmlGenerator}.
      */
-    private void writeChildNodes(SubsonicResponse response, JsonGenerator generator){
-        // No need to differentiate between the generators in this, as this uses methods available in both.
+    private void writeChildNodes(SubsonicResponse response, JsonGenerator generator,String parentNodeName){
+        Set<String> nodesAllowedToHaveMultipleChildren = new HashSet<>();
+        nodesAllowedToHaveMultipleChildren.add("users");
         for (Map.Entry<String,List<SubsonicResponse>> children: response.childNodes.entrySet()){
             List<SubsonicResponse> childNodes = children.getValue();
-            if (childNodes.size() == 1){
-                generator.writeName(children.getKey());
-                writeChildObject(childNodes.getFirst(),generator);
-            }
-            else {
+            // hacky solution, not really sure why it worked first try,
+            // and not sure how I could do it differently in a non-hacky way quite yet,
+            // which means refactor soon TM I guess
+            if(nodesAllowedToHaveMultipleChildren.contains(parentNodeName)){
                 generator.writeArrayPropertyStart(children.getKey());
                 for (SubsonicResponse child : childNodes){
-                    writeChildObject(child,generator);
+                    writeChildObject(child,generator, children.getKey());
                 }
                 generator.writeEndArray();
+            }
+            else {
+                generator.writeName(children.getKey());
+                writeChildObject(childNodes.getFirst(),generator, children.getKey());
             }
         }
     }
@@ -131,10 +137,10 @@ public class ResponseSerializer extends ValueSerializer<SubsonicResponse> {
      * @param response the response to be passed in from either a
      * @param generator the generator passed along, either of type {@link JsonGenerator}, or {@link ToXmlGenerator}
      */
-    private void writeChildObject(SubsonicResponse response,JsonGenerator generator){
+    private void writeChildObject(SubsonicResponse response,JsonGenerator generator,String nodeName){
         generator.writeStartObject();
         writeAttributes(response,generator);
-        if (!response.childNodes.isEmpty()) writeChildNodes(response,generator);
+        if (!response.childNodes.isEmpty()) writeChildNodes(response,generator,nodeName);
         generator.writeEndObject();
     }
 
