@@ -57,15 +57,47 @@ public class ResponseSerializer extends ValueSerializer<SubsonicResponse> {
             for (Map.Entry<String,Object> entry: response.attributes.entrySet()){
                 // When writing attributes, writeStartObject is not necessary, as it is an attribute, not a new object.
                 // Why I thought otherwise, idk...
-                xmlGenerator.writeName(entry.getKey());
-                xmlGenerator.setNextIsAttribute(true);
-                xmlGenerator.writeString(entry.getValue().toString());
+
+                if (entry.getValue() instanceof String str) {
+                    xmlGenerator.setNextIsAttribute(true);
+                    xmlGenerator.writeName(entry.getKey());
+                    xmlGenerator.writeString(str);
+                }
+                else if(entry.getValue() instanceof Boolean bool){
+                    xmlGenerator.setNextIsAttribute(true);
+                    xmlGenerator.writeName(entry.getKey());
+                    xmlGenerator.writeBoolean(bool);
+                }
+                else if(entry.getValue() instanceof Number num){
+                    xmlGenerator.setNextIsAttribute(true);
+                    xmlGenerator.writeName(entry.getKey());
+                    xmlGenerator.writeNumber((int) num);
+                }
             }
+            for (Map.Entry<String,Object> entry: response.attributes.entrySet()){
+                // This second loop is required, as writing an array closes the object,
+                // and if included in the loop above, would prevent other attributes from being written.
+                // I might just be tired right now, but this seems like the easiest, albeit a costly solution.
+                if (entry.getValue() instanceof int[] arr) {
+                    xmlGenerator.setNextIsAttribute(false);
+                    xmlGenerator.writeName(entry.getKey());
+                    xmlGenerator.writeStartArray();
+                    for (int i : arr) {
+                        xmlGenerator.writeNumber(i);
+                    }
+                    xmlGenerator.writeEndArray();
+                }
+            }
+
         }
         else {
             for (Map.Entry<String,Object> entry: response.attributes.entrySet()){
                 generator.writeName(entry.getKey());
-                generator.writeString(entry.getValue().toString());
+                if (entry.getValue() instanceof int[] arr)
+                    generator.writeArray(arr,0, arr.length);
+                else if(entry.getValue() instanceof Integer num)
+                    generator.writeNumber(num);
+                else generator.writeString(entry.getValue().toString());
             }
         }
     }
