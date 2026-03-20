@@ -9,4 +9,8 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     User getUserById(int id);
 
     User getUserByUserName(String userName);
+
+    void removeUserById(int id);
+
+
 }

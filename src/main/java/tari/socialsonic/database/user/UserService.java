@@ -13,11 +13,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User getUserByUsername(String username){
-        return userRepository.getUserByUserName(username);
-    }
-    public User getUserById(int id){
-        return userRepository.getUserById(id);
+
+    public void removeUser(User user){
+        userRepository.removeUserById(user.getId());
     }
     public List<User> getAll(){
         return userRepository.findAll();

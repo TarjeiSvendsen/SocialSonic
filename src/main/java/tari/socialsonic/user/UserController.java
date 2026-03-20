@@ -89,6 +89,33 @@ public class UserController {
         else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
 
+    @GetMapping(value = {"/rest/deleteUser", "/api/v1/deleteUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> getDeleteUser(@RequestParam Map<String, String> params) {
+        return deleteUser(params);
+    }
+
+    @PostMapping(value = {"/rest/deleteUser", "/api/v1/deleteUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<String> postDeleteUser(@RequestParam Map<String, String> params) {
+        return deleteUser(params);
+    }
+
+    private ResponseEntity<String> deleteUser(Map<String,String> params){
+        int authResult = authUtils.authenticate(params);
+        if (authResult <= -1) {
+            User authenticatedUser = authUtils.getUserFromParams(params);
+            if (!authenticatedUser.getUserName().equals(params.get("username")) || !authUtils.isUserAdmin(params)){
+                return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
+            }
+            if (!responseUtils.containsParams(params, new String[]{"username"}))
+                return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
+
+            User userToRemove = authUtils.getUserByUsername(params.get("username"));
+            userService.removeUser(userToRemove);
+            authUtils.regenerateUserMap();
+            return responseUtils.generateResponse(params);
+        }
+        else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
+    }
 
     @GetMapping(value = {"/rest/updatePassword", "/api/v1/updatePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getUpdatePassword(@RequestParam Map<String, String> params) {
