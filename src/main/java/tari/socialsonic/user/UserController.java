@@ -183,11 +183,11 @@ public class UserController {
     }
 
 
-    @GetMapping(value = {"/rest/updatePassword", "/api/v1/updatePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = {"/rest/changePassword", "/api/v1/changePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getUpdatePassword(@RequestParam Map<String, String> params) {
         return updatePassword(params);
     }
-    @PostMapping(value = {"/rest/updatePassword", "/api/v1/updatePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = {"/rest/changePassword", "/api/v1/changePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> postUpdatePassword(@RequestParam Map<String, String> params) {
         return updatePassword(params);
     }
