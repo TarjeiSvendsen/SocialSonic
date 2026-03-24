@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tari.socialsonic.SubsonicResponse;
-import tari.socialsonic.database.apiKey.ApiKeyService;
 import tari.socialsonic.database.user.UserService;
 import tari.socialsonic.database.user.User;
 import tari.socialsonic.database.user.roles.UserRoleService;
@@ -25,15 +24,13 @@ public class UserController {
 
     private final ResponseUtils responseUtils;
     private final AuthenticationUtils authUtils;
-    private final ApiKeyService apiKeyService;
     private final UserRoleService userRoleService;
     private final UserService userService;
     private final Environment environment;
 
-    public UserController(ResponseUtils responseUtils, AuthenticationUtils authUtils, ApiKeyService apiKeyService, UserRoleService userRoleService, UserService userService, Environment environment) {
+    public UserController(ResponseUtils responseUtils, AuthenticationUtils authUtils, UserRoleService userRoleService, UserService userService, Environment environment) {
         this.responseUtils = responseUtils;
         this.authUtils = authUtils;
-        this.apiKeyService = apiKeyService;
         this.userRoleService = userRoleService;
         this.userService = userService;
         this.environment = environment;
@@ -53,8 +50,8 @@ public class UserController {
         int authResult = authUtils.authenticate(params);
         if (authResult <= -1) {
             boolean isUserAdmin = authUtils.isUserAdmin(params);
-            if ( !isUserAdmin && Objects.equals(environment.getProperty("SCS_NON_ADMIN_USER_CREATION"),"false")
-                    || !isUserAdmin && params.get("adminRole").equals("true")){
+            if ( (!isUserAdmin && Objects.equals(environment.getProperty("SCS_NON_ADMIN_USER_CREATION"),"false")
+            )|| (!isUserAdmin && params.get("adminRole").equals("true"))){
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
             }
             if (!responseUtils.containsParams(params,new String[]{"username","password","email"}))
