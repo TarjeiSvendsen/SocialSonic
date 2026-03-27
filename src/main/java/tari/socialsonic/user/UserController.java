@@ -36,12 +36,12 @@ public class UserController {
         this.environment = environment;
     }
 
-    @GetMapping(value = {"/rest/createUser", "/api/v1/createUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = {"/rest/createUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getCreateUser(@RequestParam Map<String, String> params) {
         return createUser(params);
     }
 
-    @PostMapping(value = {"/rest/createUser", "/api/v1/createUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = {"/rest/createUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> postCreateUser(@RequestParam Map<String, String> params) {
         return createUser(params);
     }
@@ -67,12 +67,12 @@ public class UserController {
         else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
 
-    @GetMapping(value = {"/rest/deleteUser", "/api/v1/deleteUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = {"/rest/deleteUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getDeleteUser(@RequestParam Map<String, String> params) {
         return deleteUser(params);
     }
 
-    @PostMapping(value = {"/rest/deleteUser", "/api/v1/deleteUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = {"/rest/deleteUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> postDeleteUser(@RequestParam Map<String, String> params) {
         return deleteUser(params);
     }
@@ -93,12 +93,12 @@ public class UserController {
         else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
 
-    @GetMapping(value = {"/rest/updateUser", "/api/v1/updateUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = {"/rest/updateUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getUpdateUser(@RequestParam Map<String, String> params) {
         return updateUser(params);
     }
 
-    @PostMapping(value = {"/rest/updateUser", "/api/v1/updateUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = {"/rest/updateUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> postUpdateUser(@RequestParam Map<String, String> params) {
         return updateUser(params);
     }
@@ -121,13 +121,13 @@ public class UserController {
         else return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(authResult));
     }
 
-    @GetMapping(value = {"/rest/getUser", "/api/v1/getUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = {"/rest/getUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getGetUser(@RequestParam Map<String, String> params) {
         // Sidenote, this method name sucks.
         return getUserInfo(params);
     }
 
-    @PostMapping(value = {"/rest/getUser", "/api/v1/getUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = {"/rest/getUser"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> postGetUser(@RequestParam Map<String, String> params) {
         return getUserInfo(params);
     }
@@ -151,13 +151,13 @@ public class UserController {
 
 
 
-    @GetMapping(value = {"/rest/getUsers", "/api/v1/getUsers"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = {"/rest/getUsers"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getGetUsers(@RequestParam Map<String, String> params) {
         // Sidenote, this method name sucks.
         return getAllUsers(params);
     }
 
-    @PostMapping(value = {"/rest/getUsers", "/api/v1/getUsers"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = {"/rest/getUsers"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> postGetUsers(@RequestParam Map<String, String> params) {
         return getAllUsers(params);
     }
@@ -180,11 +180,11 @@ public class UserController {
     }
 
 
-    @GetMapping(value = {"/rest/changePassword", "/api/v1/changePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = {"/rest/changePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getUpdatePassword(@RequestParam Map<String, String> params) {
         return updatePassword(params);
     }
-    @PostMapping(value = {"/rest/changePassword", "/api/v1/changePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = {"/rest/changePassword"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> postUpdatePassword(@RequestParam Map<String, String> params) {
         return updatePassword(params);
     }

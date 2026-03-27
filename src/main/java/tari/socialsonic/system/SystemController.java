@@ -31,12 +31,12 @@ public class SystemController {
         this.environment = environment;
     }
 
-    @GetMapping(value = {"/rest/ping", "/api/v1/ping"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = {"/rest/ping"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getPing(@RequestParam Map<String, String> params) {
         return ping(params);
     }
 
-    @PostMapping(value={"/rest/ping","api/v1/ping"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @PostMapping(value={"/rest/ping"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<String> postPing(@RequestParam Map<String,String> body){
         return ping(body);
     }
@@ -49,12 +49,12 @@ public class SystemController {
     }
 
     //
-    @GetMapping(value= {"/rest/tokenInfo","/api/v1/tokenInfo"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value= {"/rest/tokenInfo"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> getTokenInfo(@RequestParam Map<String, String> params){
         return tokenInfo(params);
     }
 
-    @PostMapping(value={"/rest/tokenInfo","/api/v1/tokenInfo"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @PostMapping(value={"/rest/tokenInfo"}, produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity<String> postTokenInfo(@RequestParam Map<String,String> params){
         return tokenInfo(params);
     }
