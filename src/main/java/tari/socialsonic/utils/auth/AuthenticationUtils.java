@@ -77,6 +77,12 @@ public class AuthenticationUtils {
         return UserUtils.isUserAdmin(getUserFromParams(params));
     }
 
+    /**
+     * Checks if the authenticated user is authorized to make changes to something.
+     * If they are modifying something of their own info
+     * @param params
+     * @return
+     */
     public boolean isUserAuthorized(Map<String,String> params){
         User authenticatedUser = getUserFromParams(params);
         if (!authenticatedUser.getUserName().equals(params.get("username")) || !isUserAdmin(params)){
