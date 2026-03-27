@@ -24,4 +24,4 @@ COPY internal.env ./
 # Start the application jar - this is not the uber jar used by the builder
 # This jar only contains application code and references to the extracted jar files
 # This layout is efficient to start up and AOT cache (and CDS) friendly
-ENTRYPOINT ["java", "-jar", "application.jar", "--spring.config.location=/application/application.yml", "-XX:+UseCompactObjectHeaders"]
+ENTRYPOINT ["java", "-jar", "application.jar", "--spring.config.location=/application/application.yml", "-XX:+UseCompactObjectHeaders", "-XX:+UseStringDeduplication"]

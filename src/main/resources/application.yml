@@ -11,3 +11,9 @@ spring:
       ddl-auto: update
   application:
     name: SocialSonic
+  main:
+    banner-mode: off
+server:
+  tomcat:
+    threads:
+      max: 75
