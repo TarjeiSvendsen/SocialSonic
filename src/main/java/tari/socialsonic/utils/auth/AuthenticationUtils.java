@@ -55,7 +55,7 @@ public class AuthenticationUtils {
     }
 
     /**
-     * Generates a random key, ?? bytes long
+     * Generates a random key, 16 chars long
      * @return a hexadecimal string.
      */
     public static String generateKey(){
@@ -82,8 +82,8 @@ public class AuthenticationUtils {
      * If they are modifying something of their own info, they should be allowed to do so,
      * unless that is something left only to admins,
      * (in which case {@link AuthenticationUtils#isUserAdmin(Map)} should be used instead).
-     * @param params
-     * @return
+     * @param params the parameters for getting the user, and what user they are intending to make changes to.
+     * @return a boolean indicating if the user is authorized.
      */
     public boolean isUserAuthorized(Map<String,String> params){
         User authenticatedUser = getUserFromParams(params);
