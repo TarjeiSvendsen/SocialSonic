@@ -2,16 +2,9 @@ package tari.socialsonic.database.user.roles;
 
 
 import jakarta.persistence.*;
-import tari.socialsonic.database.user.User;
 
-@Table(name = "user_roles")
-@Entity
+@Embeddable
 public class UserRoles {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @OneToOne(mappedBy = "roles")
-    private User user;
     private boolean adminRole = false;
     private boolean settingsRole = true;
     private boolean streamRole = true;
@@ -29,21 +22,7 @@ public class UserRoles {
     }
 
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public boolean hasAdminRole() {
         return adminRole;

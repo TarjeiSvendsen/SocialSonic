@@ -21,8 +21,7 @@ public class User {
     private byte[] hashedPassword;
     private boolean ldapAuthenticated;
 
-    @OneToOne
-    @JoinColumn(name = "roles",referencedColumnName = "id")
+    @Embedded
     private UserRoles roles;
 
     public User(){
@@ -68,7 +67,6 @@ public class User {
         return hashedPassword;
     }
 
-    // TODO, should make updating the password possible
     public void setHashedPassword(byte[] hashedPassword) {
         this.hashedPassword = hashedPassword;
     }

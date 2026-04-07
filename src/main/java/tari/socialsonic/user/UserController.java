@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import tari.socialsonic.SubsonicResponse;
 import tari.socialsonic.database.user.UserService;
 import tari.socialsonic.database.user.User;
-import tari.socialsonic.database.user.roles.UserRoleService;
 import tari.socialsonic.utils.auth.AuthenticationUtils;
 import tari.socialsonic.utils.auth.PasswordUtils;
 import tari.socialsonic.utils.auth.UserUtils;
@@ -24,14 +23,12 @@ public class UserController {
 
     private final ResponseUtils responseUtils;
     private final AuthenticationUtils authUtils;
-    private final UserRoleService userRoleService;
     private final UserService userService;
     private final Environment environment;
 
-    public UserController(ResponseUtils responseUtils, AuthenticationUtils authUtils, UserRoleService userRoleService, UserService userService, Environment environment) {
+    public UserController(ResponseUtils responseUtils, AuthenticationUtils authUtils, UserService userService, Environment environment) {
         this.responseUtils = responseUtils;
         this.authUtils = authUtils;
-        this.userRoleService = userRoleService;
         this.userService = userService;
         this.environment = environment;
     }
@@ -58,8 +55,7 @@ public class UserController {
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
             User newUser = new User();
             UserUtils.handleUserParams(params,newUser);
-            newUser.setRoles(UserUtils.setRoles(params,isUserAdmin));
-            userRoleService.save(newUser.getRoles());
+            newUser.setRoles(UserUtils.setRoles(params,newUser.getRoles()));
             userService.save(newUser);
             authUtils.regenerateUserMap();
             return responseUtils.generateResponse(params, new SubsonicResponse(true));
@@ -110,10 +106,10 @@ public class UserController {
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
             if (!responseUtils.containsParams(params,new String[]{"username"}))
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
+
             User user = authUtils.getUserByUsername(params.get("username"));
             UserUtils.handleUserParams(params,user);
-            user.setRoles(UserUtils.setRoles(params,authUtils.isUserAdmin(params)));
-            userRoleService.save(user.getRoles());
+            user.setRoles(UserUtils.setRoles(params,user.getRoles()));
             userService.save(user);
             authUtils.regenerateUserMap();
             return responseUtils.generateResponse(params, new SubsonicResponse(true));

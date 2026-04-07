@@ -79,16 +79,18 @@ public class AuthenticationUtils {
 
     /**
      * Checks if the authenticated user is authorized to make changes to something.
-     * If they are modifying something of their own info
+     * If they are modifying something of their own info, they should be allowed to do so,
+     * unless that is something left only to admins,
+     * (in which case {@link AuthenticationUtils#isUserAdmin(Map)} should be used instead).
      * @param params
      * @return
      */
     public boolean isUserAuthorized(Map<String,String> params){
         User authenticatedUser = getUserFromParams(params);
-        if (!authenticatedUser.getUserName().equals(params.get("username")) || !isUserAdmin(params)){
-            return false;
+        if (authenticatedUser.getUserName().equals(params.get("username"))){
+            return true;
         }
-        else return true;
+        else return isUserAdmin(params);
     }
 
      /**

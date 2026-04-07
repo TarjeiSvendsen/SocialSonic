@@ -22,7 +22,7 @@ class UserTests {
         }
         @Test
         public void userRolesMatchDefaultWhenCreatedByUserUtilsWithEmptyParams(){
-            UserRoles roles = UserUtils.setRoles(new HashMap<>(),false);
+            UserRoles roles = UserUtils.setRoles(new HashMap<>(),null);
             assertFalse(roles.hasAdminRole());
             assertTrue(roles.hasStreamRole());
         }

@@ -14,14 +14,20 @@ public class UserUtils {
 
 
 
+    public static UserRoles setRoles(Map<String, String> params){
+        return setRoles(params,null);
+    }
     /**
      * Sets the roles according to the ones provided with {@code params}.
      * @param params the parameters to parse, provided by a get, or post mapping in a controller.
-     * @param isUserAdmin passed along to make sure no user gets roles they are not entitled to.
+     * @param existingRoles the user roles to edit, can be null if creating a user from scratch.
      * @return A string, containing the updated set of roles.
      */
-    public static UserRoles setRoles(Map<String,String> params,boolean isUserAdmin){
-        UserRoles tmpUserRoles = new UserRoles();
+    public static UserRoles setRoles(Map<String,String> params,UserRoles existingRoles){
+        UserRoles tmpUserRoles;
+        tmpUserRoles = Objects.requireNonNullElseGet(existingRoles, UserRoles::new);
+        boolean isUserAdmin = tmpUserRoles.hasAdminRole();
+
         for (String key: params.keySet()){
             switch (key){
                 case "adminRole":
