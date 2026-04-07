@@ -21,7 +21,8 @@ public class User {
     private byte[] hashedPassword;
     private boolean ldapAuthenticated;
 
-    @Embedded
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private UserRoles roles;
 
     public User(){
