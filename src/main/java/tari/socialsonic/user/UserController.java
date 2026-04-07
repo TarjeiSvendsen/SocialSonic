@@ -108,6 +108,9 @@ public class UserController {
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(10));
 
             User user = authUtils.getUserByUsername(params.get("username"));
+            if (user == null)
+                return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(70));
+
             UserUtils.handleUserParams(params,user);
             user.setRoles(UserUtils.setRoles(params,user.getRoles()));
             userService.save(user);
