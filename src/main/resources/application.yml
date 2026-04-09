@@ -2,13 +2,13 @@ spring:
   config:
     import: optional:file:internal.env[.properties]
   datasource:
-    url: jdbc:${DB_JDBC_TYPE}://${DB_HOST}:${DB_PORT}/${DB_DB_NAME}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-    driver-class-name: ${DB_DRIVER}
+    url: jdbc:${DB_JDBC_TYPE:postgresql}://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_DB_NAME:SocialSonic}
+    username: ${DB_USER:Sonic}
+    password: ${DB_PASSWORD:ChangeMe}
+    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
   application:
     name: SocialSonic
   main:
@@ -16,4 +16,4 @@ spring:
 server:
   tomcat:
     threads:
-      max: 75
+      max: ${SCS_TOMCAT_THREADS:75}
