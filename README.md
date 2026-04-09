@@ -21,3 +21,8 @@ To test everything simultaneously (in IntelliJ IDEA), add a launch configuration
 | DB_PASSWORD                 |                       | The password to use with DB_USER                                                                                  |
 | DB_DRIVER                   | org.postgresql.Driver | The driver for JDBC to use, can be org.postgresql.Driver, org.mariadb.jdbc.Driver, or com.mysql.jdbc.Driver       |
 | DB_JDBC_TYPE                | postgresql            | The db type for the jdbc connection url, MUST be changed when changing the DB_DRIVER.                             |
+
+## Credits
+
+[eduardo-sl/java-docker-image](https://github.com/eduardo-sl/java-docker-image?tab=readme-ov-file) was used to reduce the docker image file from 515 MB, to only 193MB, a 62.5% reduction.
+
