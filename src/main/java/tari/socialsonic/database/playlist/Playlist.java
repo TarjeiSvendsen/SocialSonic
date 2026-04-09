@@ -5,14 +5,15 @@ import jakarta.validation.constraints.NotNull;
 import tari.socialsonic.database.user.User;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "playlists")
 public class Playlist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    UUID id;
     @ManyToOne
     @JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = "owner_fk"))
     @NotNull
@@ -22,18 +23,18 @@ public class Playlist {
     List<User> collaborators;
     String title;
     String description;
-    String image_path;
+    String imagePath;
     int visibility;
     @OneToMany
     @JoinTable(name = "playlist_songs")
     List<PlaylistSong> songs;
 
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -69,12 +70,12 @@ public class Playlist {
         this.description = description;
     }
 
-    public String getImage_path() {
-        return image_path;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage_path(String image_path) {
-        this.image_path = image_path;
+    public void setImagePath(String image_path) {
+        this.imagePath = image_path;
     }
 
     public List<PlaylistSong> getSongs() {

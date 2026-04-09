@@ -19,7 +19,7 @@ public class Album {
     private UUID id;
 
     // ID and MusicBrainz ID are separate, as an album could technically exist without being on musicbrainz.
-    int musicBrainzId;
+    String musicBrainzId;
 
     String name;
     String sortName;
@@ -64,11 +64,11 @@ public class Album {
         this.id = id;
     }
 
-    public int getMusicBrainzId() {
+    public String getMusicBrainzId() {
         return musicBrainzId;
     }
 
-    public void setMusicBrainzId(int musicBrainzId) {
+    public void setMusicBrainzId(String musicBrainzId) {
         this.musicBrainzId = musicBrainzId;
     }
 
