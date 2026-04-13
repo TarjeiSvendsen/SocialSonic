@@ -47,7 +47,7 @@ public class UserController {
         int authResult = authUtils.authenticate(params);
         if (authResult <= -1) {
             boolean isUserAdmin = authUtils.isUserAdmin(params);
-            if ( (!isUserAdmin && Objects.equals(environment.getProperty("SCS_NON_ADMIN_USER_CREATION"),"false")
+            if ( (!isUserAdmin && Objects.equals(environment.getProperty("socialsonic.user.non-admin-creation"),"false")
             )|| (!isUserAdmin && params.get("adminRole").equals("true"))){
                 return responseUtils.generateResponse(params, ErrorCodeUtils.createErrorResponseFromCode(50));
             }

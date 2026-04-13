@@ -17,3 +17,10 @@ server:
   tomcat:
     threads:
       max: ${SCS_TOMCAT_THREADS:75}
+socialsonic:
+  user:
+    non-admin-creation: ${SCS_NON_ADMIN_USER_CREATION:false}
+
+  scanner:
+    scan-interval: ${SCS_WATCHSERVICE_INTERVAL:5}
+
