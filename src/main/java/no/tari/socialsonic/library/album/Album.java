@@ -13,6 +13,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * As per the OpenSubSonics spec for <a href="https://opensubsonic.netlify.app/docs/responses/albumid3/">AlbumID3</a>,
+ * this entity contains information about an album, and its related entities, such as disc titles, record labels, etc.
+ * The key difference being the user specific fields, such as starred, playCount and the likes are absent.
+ * However, these are added in the AlbumDTO, my idea being that this entity can be cached (once I get around to doing that) separately and can be reused.
+ * As such, only the user specific fields need to be fetched (alternatively can also be cached).
+ */
 @Entity
 public class Album {
 
