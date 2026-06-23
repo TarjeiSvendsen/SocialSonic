@@ -49,12 +49,13 @@ public class Album {
     )
     private List<Artist> artists;
     //private String displayArtists;
-    private List<String> releaseTypes;
-    private List<String> moods;
-    private Date releaseDate;
+    private List<String> releaseTypes; // Unsure if these should be their own entities or just strings.
+    private List<String> moods; // --||--
+    private Timestamp originalReleaseDate;
+    private Timestamp releaseDate;
     private boolean isCompilation;
     private String explicitStatus;
-    @OneToMany
+    @ElementCollection
     private List<DiscTitle> discTitles;
 
 
